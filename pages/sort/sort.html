@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>D&D 5e – Répertoire de sorts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>📚 Répertoire de sorts D&D 5e</h1>
+
+    <!-- Recherche -->
+    <section class="search-section">
+      <input
+        type="text"
+        id="spellInput"
+        placeholder="Rechercher un sort..."
+      >
+    </section>
+
+    <div class="content">
+      <!-- Liste des sorts -->
+      <section class="directory">
+        <ul id="spellList"></ul>
+      </section>
+
+      <!-- Détails du sort -->
+      <section id="spellResult" class="result-section">
+        <p>Sélectionne un sort pour voir les détails.</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="spells.js"></script>
+</body>
+</html>

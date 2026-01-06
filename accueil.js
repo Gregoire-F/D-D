@@ -19,7 +19,7 @@ btnHeros.addEventListener("click", () => {
  * Redirige vers la page des sorts (gérée par un collègue)
  */
 btnSorts.addEventListener("click", () => {
-  window.location.href = "pages/hero/sort.html";
+  window.location.href = "pages/sort/sort.html";
 });
 
 /**
