@@ -12,25 +12,25 @@ const btnMonstres = document.getElementById("btn-monstres");
  * Redirige vers la page des héros (gérée par un collègue)
  */
 btnHeros.addEventListener("click", () => {
-  window.location.href = "heros.html";
+  window.location.href = "pages/hero/hero.html";
 });
 
 /**
  * Redirige vers la page des sorts (gérée par un collègue)
  */
 btnSorts.addEventListener("click", () => {
-  window.location.href = "sorts.html";
+  window.location.href = "pages/hero/sort.html";
 });
 
 /**
  * Redirige vers la page des items (gérée par un collègue)
  */
 btnItems.addEventListener("click", () => {
-  window.location.href = "items.html";
+  window.location.href = "pages/item/item.html";
 });
 /**
  * Redirige vers la page des monstres (gérée par un collègue)
  */
 btnMonstres.addEventListener("click", () => {
-  window.location.href = "monstres.html";
+  window.location.href = "pages/monstre/monstre.html";
 });
