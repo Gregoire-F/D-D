@@ -2,7 +2,7 @@
  * Sélection des éléments du DOM (les 3 cartes de catégories)
  */
 const btnHeros = document.getElementById("btn-heros");
-const btnSorts = document.getElementById("btn-spells");
+const btnSorts = document.getElementById("btn-sorts");
 const btnItems = document.getElementById("btn-items");
 const btnMonstres = document.getElementById("btn-monstres");
 
