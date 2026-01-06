@@ -137,3 +137,70 @@ h1 {
 .monster-actions li {
   margin-bottom: 10px;
 }
+
+/* ========================================
+// SYSTÈME DE TOOLTIPS RÉUTILISABLE
+// ======================================== */
+.tooltip {
+  position: relative;
+  cursor: help;
+  color: #8b0000;
+  font-weight: bold;
+  border-bottom: 1px dotted #8b0000;
+  transition: all 0.3s ease;
+}
+
+.tooltip:hover {
+  color: #a00;
+  border-bottom-color: #a00;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #8b0000, #a00);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: normal;
+  white-space: pre-line;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  min-width: 200px;
+  text-align: center;
+  border: 2px solid #fdf1dc;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 118%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #8b0000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+  bottom: 130%;
+}
+
+.tooltip:hover::before {
+  opacity: 1;
+  visibility: visible;
+  bottom: 123%;
+}
