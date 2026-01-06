@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dungeons & Dragons - Exploration</title>
+    <link rel="stylesheet" href="accueil.css" />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Dungeons & Dragons</h1>
+        <p class="subtitle">Explorez les mystères de l'univers D&D</p>
+      </header>
+
+      <main id="main-content">
+        <div class="categories">
+          <div class="category-card" id="btn-monsters">
+            <i class="fas fa-dragon"></i>
+            <h2>Monstres</h2>
+            <p>Découvrez les créatures légendaires et leurs statistiques.</p>
+          </div>
+
+          <div class="category-card" id="btn-spells">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <h2>Sorts</h2>
+            <p>Maîtrisez les arts arcaniques et divins.</p>
+          </div>
+
+          <div class="category-card" id="btn-items">
+            <i class="fas fa-shield-halved"></i>
+            <h2>Items</h2>
+            <p>Équipez vos héros avec les meilleurs objets.</p>
+          </div>
+        </div>
+
+        <section id="results-section">
+          <div class="section-header">
+            <h2 id="results-title">Chargement...</h2>
+            <button class="back-btn" id="back-to-categories">Retour</button>
+          </div>
+          <div id="results-container" class="results-grid"></div>
+          <div id="detail-container"></div>
+        </section>
+      </main>
+    </div>
+    <script src="accueil.js"></script>
+  </body>
+</html>
