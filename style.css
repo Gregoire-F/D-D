@@ -204,3 +204,33 @@ h1 {
   visibility: visible;
   bottom: 123%;
 }
+
+/* ========================================
+// STYLES MOBILES POUR TOOLTIPS
+// ======================================== */
+@media (max-width: 768px) {
+.tooltip::after {
+    min-width: auto;
+    max-width: 100vw;
+    width: 20vw;
+    font-size: 11px;
+    padding: 8px 12px;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .tooltip::before {
+    bottom: 103%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .tooltip:hover::after {
+    bottom: 115%;
+  }
+
+  .tooltip:hover::before {
+    bottom: 108%;
+  }
+}
