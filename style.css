@@ -1,0 +1,139 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+}
+
+#monsterInput {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#searchButton {
+  background-color: #900909;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.dropdown-container {
+  margin-bottom: 20px;
+}
+
+#monsterSelect {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.monster-result {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.monster-card {
+  background-color: #fdf1dc;
+  border: 4px solid #8b0000;
+  border-radius: 4px;
+  padding: 20px;
+  color: #333;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.monster-header h2 {
+  color: #8b0000;
+  margin: 0 0 5px 0;
+  font-size: 24px;
+  border-bottom: 2px solid #8b0000;
+}
+
+.monster-header p {
+  font-style: italic;
+  margin: 0 0 15px 0;
+  color: #555;
+}
+
+.monster-image {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  background: #eee;
+}
+
+.monster-stats-top p {
+  margin: 5px 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.ability-scores {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  padding: 10px 0;
+  border-bottom: 2px solid #8b0000;
+  border-top: 2px solid #8b0000;
+}
+
+.ability {
+  text-align: center;
+  flex: 1;
+}
+
+.ability strong {
+  display: block;
+  color: #8b0000;
+}
+
+.ability span {
+  font-size: 14px;
+}
+
+.monster-details {
+  margin: 10px 0;
+}
+
+.monster-actions h3 {
+  color: #8b0000;
+  border-bottom: 1px solid #8b0000;
+  margin: 20px 0 10px 0;
+}
+
+.monster-actions ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.monster-actions li {
+  margin-bottom: 10px;
+}
