@@ -1,17 +1,18 @@
 /**
  * Sélection des éléments du DOM (les 3 cartes de catégories)
  */
-const btnMonsters = document.getElementById("btn-monsters");
-const btnSpells = document.getElementById("btn-spells");
+const btnHeros = document.getElementById("btn-heros");
+const btnSorts = document.getElementById("btn-spells");
 const btnItems = document.getElementById("btn-items");
+const btnMonstres = document.getElementById("btn-monstres");
 
 // --- Gestionnaires d'événements (Redirection) ---
 
 /**
- * Redirige vers la page des monstres (gérée par un collègue)
+ * Redirige vers la page des héros (gérée par un collègue)
  */
-btnMonsters.addEventListener("click", () => {
-  window.location.href = "monstres.html";
+btnHeros.addEventListener("click", () => {
+  window.location.href = "heros.html";
 });
 
 /**
@@ -26,4 +27,10 @@ btnSorts.addEventListener("click", () => {
  */
 btnItems.addEventListener("click", () => {
   window.location.href = "items.html";
+});
+/**
+ * Redirige vers la page des monstres (gérée par un collègue)
+ */
+btnMonstres.addEventListener("click", () => {
+  window.location.href = "monstres.html";
 });
