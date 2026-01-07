@@ -20,31 +20,40 @@
 
       <main id="main-content">
         <div class="categories">
-          <div class="category-card" id="btn-heros">
-            <i class="fas fa-user"></i>
-            <h2>Héros</h2>
-            <p>Découvrez les héros et leurs statistiques.</p>
-          </div>
+          <category-card
+            icon="fas fa-user"
+            title="Héros"
+            description="Découvrez les héros et leurs statistiques."
+            url="pages/hero/hero.html"
+          >
+          </category-card>
 
-          <div class="category-card" id="btn-sorts">
-            <i class="fas fa-wand-magic-sparkles"></i>
-            <h2>Sorts</h2>
-            <p>Découvrez les sorts et leurs statistiques.</p>
-          </div>
+          <category-card
+            icon="fas fa-wand-magic-sparkles"
+            title="Sorts"
+            description="Découvrez les sorts et leurs statistiques."
+            url="pages/sort/sort.html"
+          >
+          </category-card>
 
-          <div class="category-card" id="btn-items">
-            <i class="fas fa-shield-halved"></i>
-            <h2>Items</h2>
-            <p>Découvrez les items et leurs statistiques.</p>
-          </div>
-          <div class="category-card" id="btn-monstres">
-            <i class="fas fa-dragon"></i>
-            <h2>Monstres</h2>
-            <p>Découvrez les monstres et leurs statistiques.</p>
-          </div>
+          <category-card
+            icon="fas fa-shield-halved"
+            title="Items"
+            description="Découvrez les items et leurs statistiques."
+            url="pages/item/item.html"
+          >
+          </category-card>
+
+          <category-card
+            icon="fas fa-dragon"
+            title="Monstres"
+            description="Découvrez les monstres et leurs statistiques."
+            url="pages/monstre/monstre.html"
+          >
+          </category-card>
         </div>
       </main>
     </div>
-    <script src="accueil.js"></script>
+    <script src="components/CategoryCard.js"></script>
   </body>
 </html>
