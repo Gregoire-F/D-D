@@ -62,6 +62,26 @@ function displaySpellList(spells) {
 }
 
 // ========================================
+// FORMATAGE MARKDOWN
+// ========================================
+function parseMarkdown(text) {
+  if (!text) return "";
+  return text
+    // Bold + Italic (***text***)
+    .replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>")
+    // Bold (**text**)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    // Italic (*text* ou _text_)
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/_(.+?)_/g, "<em>$1</em>")
+    // Listes à puces (- item)
+    .replace(/^- (.+)$/gm, "<li>$1</li>")
+    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+    // Nettoyer les ul imbriqués
+    .replace(/<\/ul>\s*<ul>/g, "");
+}
+
+// ========================================
 // CHARGEMENT DES DÉTAILS
 // ========================================
 async function loadSpellDetails(url) {
@@ -70,6 +90,11 @@ async function loadSpellDetails(url) {
   try {
     const response = await fetch(`https://www.dnd5eapi.co${url}`);
     const spell = await response.json();
+
+    const description = spell.desc.map(parseMarkdown).join("<br><br>");
+    const higherLevel = spell.higher_level
+      ? spell.higher_level.map(parseMarkdown).join("<br><br>")
+      : "";
 
     spellResult.innerHTML = `
       <div class="spell-card">
@@ -85,11 +110,11 @@ async function loadSpellDetails(url) {
         <p><strong>Composants :</strong> ${spell.components.join(", ")}</p>
 
         <h3>Description</h3>
-        <p>${spell.desc.join("<br><br>")}</p>
+        <p>${description}</p>
 
         ${
-          spell.higher_level
-            ? `<h3>À plus haut niveau</h3><p>${spell.higher_level.join("<br><br>")}</p>`
+          higherLevel
+            ? `<h3>À plus haut niveau</h3><p>${higherLevel}</p>`
             : ""
         }
 
