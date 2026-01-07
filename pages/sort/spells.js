@@ -1,5 +1,5 @@
 const spellInput = document.getElementById("spellInput");
-const spellList = document.getElementById("spellList");
+const spellList = document.getElementById("spellList"); // Maintenant un <select>
 const spellResult = document.getElementById("spellResult");
 
 let allSpells = [];
@@ -16,39 +16,46 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     displaySpellList(allSpells);
   } catch (error) {
-    spellList.innerHTML = "<li>Erreur de chargement</li>";
+    spellList.innerHTML = "<option>Erreur de chargement</option>";
   }
 });
 
-// Affiche la liste des sorts
+// Affiche la liste des sorts dans le SELECT
 function displaySpellList(spells) {
   spellList.innerHTML = "";
 
+  // Option par défaut
+  const defaultOption = document.createElement("option");
+  defaultOption.textContent = spells.length > 0 ? "-- Choisissez un sort --" : "Aucun sort trouvé";
+  defaultOption.value = "";
+  spellList.appendChild(defaultOption);
+
   spells.forEach(spell => {
-    const li = document.createElement("li");
-    li.textContent = spell.name;
-    li.classList.add("spell-item");
-
-    li.addEventListener("click", () => {
-      loadSpellDetails(spell.url);
-    });
-
-    spellList.appendChild(li);
+    const option = document.createElement("option");
+    option.textContent = spell.name;
+    option.value = spell.url; // On stocke l'URL dans la valeur de l'option
+    spellList.appendChild(option);
   });
 }
+
+// Écouteur de changement sur le SELECT
+spellList.addEventListener("change", (e) => {
+  const url = e.target.value;
+  if (url) {
+    loadSpellDetails(url);
+  }
+});
 
 // Recherche en temps réel
 spellInput.addEventListener("input", () => {
   const value = spellInput.value.toLowerCase();
-
   const filtered = allSpells.filter(spell =>
     spell.name.toLowerCase().includes(value)
   );
-
   displaySpellList(filtered);
 });
 
-// Chargement des détails du sort
+// Chargement des détails du sort (Inchangé)
 async function loadSpellDetails(url) {
   spellResult.innerHTML = "Chargement du sort...";
 
@@ -58,11 +65,13 @@ async function loadSpellDetails(url) {
 
     spellResult.innerHTML = `
       <div class="spell-card">
+        <div class="spell-header">
         <h2>${spell.name}</h2>
         <p><em>
           ${spell.level === 0 ? "Cantrip" : "Niveau " + spell.level}
           • ${spell.school.name}
         </em></p>
+        </div>
 
         <p><strong>Temps d’incantation :</strong> ${spell.casting_time}</p>
         <p><strong>Portée :</strong> ${spell.range}</p>

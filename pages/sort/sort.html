@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>D&D 5e – Répertoire de sorts</title>
@@ -7,24 +8,19 @@
 
   <link rel="stylesheet" href="../../style.css">
 </head>
+
 <body>
 
-  <main class="container">
-    <h1>📚 Répertoire de sorts D&D 5e</h1>
+  <div class="container">
 
-    <!-- Recherche -->
-    <section class="search-section">
-      <input
-        type="text"
-        id="spellInput"
-        placeholder="Rechercher un sort..."
-      >
-    </section>
+    <h1>📚 Répertoire de sorts D&D 5e</h1>
 
     <div class="content">
       <!-- Liste des sorts -->
       <section class="directory">
-        <ul id="spellList"></ul>
+        <select id="spellList">
+          <option value="">Choisissez un sort</option>
+        </select>
       </section>
 
       <!-- Détails du sort -->
@@ -32,8 +28,9 @@
         <p>Sélectionne un sort pour voir les détails.</p>
       </section>
     </div>
-  </main>
+  </div>
 
   <script src="spells.js"></script>
 </body>
+
 </html>
