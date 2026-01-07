@@ -3,23 +3,13 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../style.css" />
-    <title>Recherche de Héros (Classes)</title>
+    <title>Classes de Héros</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Recherche de Classes (Héros)</h1>
-        <input type="text" id="heroInput" placeholder="Entrez une classe (ex: Wizard, Barbarian)" />
-        <button id="searchButton">Rechercher</button>
-        <div class="dropdown-container">
-            <select id="heroSelect">
-                <option value="">-- Choisissez une classe --</option>
-            </select>
-        </div>
-        <div id="heroResult" class="monster-result"></div>
-    </div>
+    <dnd-search title="Classes (Héros)" endpoint="classes"></dnd-search>
+    <script src="../../components/dnd-search.js"></script>
     <script src="hero.js"></script>
 </body>
 

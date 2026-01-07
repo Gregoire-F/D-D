@@ -1,36 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recherche Items D&D</title>
-    <link rel="stylesheet" href="../../style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Grimoire d'Items</h1>
 
-      <input
-        type="text"
-        id="monsterInput"
-        placeholder="Rechercher (ex: Dagger, Shield)..."
-      />
+<head>
+  <meta charset="UTF-8" />
+  <title>Items & Équipement</title>
+  <link rel="stylesheet" href="../../style.css" />
+</head>
 
-      <button id="searchButton">Rechercher</button>
+<body>
+  <dnd-search title="Items & Équipement" endpoint="equipment"></dnd-search>
+  <script src="../../components/dnd-search.js"></script>
+  <script src="item.js"></script>
+</body>
 
-      <div
-        class="dropdown-container"
-        style="display: none"
-        id="dropdownWrapper"
-      >
-        <select id="monsterSelect">
-          <option value="">-- Choisir un item --</option>
-        </select>
-      </div>
-
-      <div class="monster-result" id="resultArea"></div>
-    </div>
-
-    <script src="item.js"></script>
-  </body>
 </html>
