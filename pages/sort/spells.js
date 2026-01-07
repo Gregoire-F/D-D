@@ -63,23 +63,8 @@ function displaySpellList(spells) {
 
 // ========================================
 // FORMATAGE MARKDOWN
+// Utilise le module partagé DndMarkdown
 // ========================================
-function parseMarkdown(text) {
-  if (!text) return "";
-  return text
-    // Bold + Italic (***text***)
-    .replace(/\*\*\*(.+?)\*\*\*/g, "<strong><em>$1</em></strong>")
-    // Bold (**text**)
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    // Italic (*text* ou _text_)
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/_(.+?)_/g, "<em>$1</em>")
-    // Listes à puces (- item)
-    .replace(/^- (.+)$/gm, "<li>$1</li>")
-    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
-    // Nettoyer les ul imbriqués
-    .replace(/<\/ul>\s*<ul>/g, "");
-}
 
 // ========================================
 // CHARGEMENT DES DÉTAILS
@@ -91,9 +76,9 @@ async function loadSpellDetails(url) {
     const response = await fetch(`https://www.dnd5eapi.co${url}`);
     const spell = await response.json();
 
-    const description = spell.desc.map(parseMarkdown).join("<br><br>");
+    const description = DndMarkdown.parseArray(spell.desc);
     const higherLevel = spell.higher_level
-      ? spell.higher_level.map(parseMarkdown).join("<br><br>")
+      ? DndMarkdown.parseArray(spell.higher_level)
       : "";
 
     spellResult.innerHTML = `

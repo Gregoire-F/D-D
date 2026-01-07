@@ -141,7 +141,7 @@ function renderCard(item) {
 
   if (item.desc && item.desc.length > 0) {
     item.desc.forEach((line) => {
-      html += `<li>${line}</li>`;
+      html += `<li>${DndMarkdown.parse(line)}</li>`;
     });
   } else {
     html += `<li>Pas de description détaillée disponible.</li>`;

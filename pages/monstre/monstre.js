@@ -70,7 +70,7 @@ function formatSpeed(speed) {
 function formatList(list) {
   if (!list || list.length === 0) return "None";
   return `<ul>${list
-    .map((item) => `<li><strong>${item.name}:</strong> ${item.desc}</li>`)
+    .map((item) => `<li><strong>${item.name}:</strong> ${DndMarkdown.parse(item.desc)}</li>`)
     .join("")}</ul>`;
 }
 

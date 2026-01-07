@@ -257,6 +257,59 @@ h1 {
     bottom: 108%;
     transform: translateX(-50%) scale(1);
   }
+}
 
+/* ========================================
+// TABLEAUX MARKDOWN (DndMarkdown)
+// Styles globaux pour les tableaux générés
+// ======================================== */
+.dnd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  font-size: 13px;
+  background: #fff;
+  border: 2px solid #8b0000;
+  border-radius: 4px;
+  overflow: hidden;
+}
 
+.dnd-table th,
+.dnd-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.dnd-table th {
+  background-color: #8b0000;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.dnd-table tbody tr:nth-child(even) {
+  background-color: #f9f3e8;
+}
+
+.dnd-table tbody tr:hover {
+  background-color: #fdf1dc;
+}
+
+.dnd-table td {
+  color: #333;
+}
+
+/* Titres Markdown dans les descriptions */
+.monster-card h4,
+.monster-card h5 {
+  color: #8b0000;
+  margin: 15px 0 8px 0;
+  font-size: 14px;
+}
+
+.monster-card h5 {
+  font-size: 13px;
+  font-style: italic;
 }
