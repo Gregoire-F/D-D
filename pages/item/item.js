@@ -104,17 +104,21 @@ function renderCard(item) {
   // Logique pour la 3ème stat
   let stat3Label = "Info";
   let stat3Value = "-";
+  let stat3Tooltip = "";
 
   if (item.armor_class) {
     stat3Label = "AC";
     stat3Value =
       item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : "");
+    stat3Tooltip = "Classe d'armure - Protection fournie";
   } else if (item.damage) {
     stat3Label = "Dégâts";
     stat3Value = `${item.damage.damage_dice} ${item.damage.damage_type.name}`;
+    stat3Tooltip = "Dégâts infligés par l'arme";
   } else if (item.rarity) {
     stat3Label = "Rareté";
     stat3Value = item.rarity.name;
+    stat3Tooltip = "Niveau de rareté de l'objet magique";
   }
 
   let html = `
@@ -128,20 +132,8 @@ function renderCard(item) {
         <p><strong>Catégorie :</strong> ${type}</p>
       </div>
 
-      <div class="ability-scores">
-        <div class="ability">
-          <strong>Coût</strong>
-          <span>${cost}</span>
-        </div>
-        <div class="ability">
-          <strong>Poids</strong>
-          <span>${weight}</span>
-        </div>
-        <div class="ability">
-          <strong>${stat3Label}</strong>
-          <span>${stat3Value}</span>
-        </div>
-      </div>
+      <!-- Stats de l'item (WebComponent) -->
+      <dnd-stat-grid id="itemStats"></dnd-stat-grid>
 
       <div class="monster-actions">
         <h3>Description & Propriétés</h3>
@@ -169,4 +161,24 @@ function renderCard(item) {
   html += `</ul></div></div>`;
 
   resultArea.innerHTML = html;
+
+  // Peupler le composant stat-grid avec les stats de l'item
+  const statGrid = resultArea.querySelector("#itemStats");
+  statGrid.stats = [
+    {
+      label: "Coût",
+      value: cost,
+      tooltip: "Prix de l'objet en pièces",
+    },
+    {
+      label: "Poids",
+      value: weight,
+      tooltip: "Poids de l'objet en livres",
+    },
+    {
+      label: stat3Label,
+      value: stat3Value,
+      tooltip: stat3Tooltip || "Information supplémentaire",
+    },
+  ];
 }

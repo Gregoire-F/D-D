@@ -98,12 +98,8 @@ async function searchClass(indexOrName) {
           onerror="this.onerror=null; this.src='${placeholder}';"
         />
 
-        <div class="monster-stats-top">
-          <p><strong>Hit Die:</strong> 1d${heroData.hit_die} par niveau</p>
-          <p><strong>Saving Throws:</strong> ${heroData.saving_throws
-            .map((s) => s.name)
-            .join(", ")}</p>
-        </div>
+        <!-- Stats de la classe (WebComponent) -->
+        <dnd-stat-grid id="heroStats"></dnd-stat-grid>
 
         <div class="monster-details">
           <p><strong>Proficiencies:</strong> ${formatProficiencies(
@@ -123,6 +119,26 @@ async function searchClass(indexOrName) {
         </div>
       </div>
     `;
+
+    // Peupler le composant stat-grid avec les infos de la classe
+    const statGrid = heroResult.querySelector("#heroStats");
+    statGrid.stats = [
+      {
+        label: "Hit Die",
+        value: `d${heroData.hit_die}`,
+        tooltip: "Dé de vie - Points de vie gagnés par niveau",
+      },
+      {
+        label: "Saves",
+        value: heroData.saving_throws.map((s) => s.name).join(", "),
+        tooltip: "Jets de sauvegarde maîtrisés",
+      },
+      {
+        label: "Subclasses",
+        value: String(heroData.subclasses?.length || 0),
+        tooltip: "Nombre de sous-classes disponibles",
+      },
+    ];
   } catch (error) {
     console.error(error);
     heroResult.innerHTML =

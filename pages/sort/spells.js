@@ -104,10 +104,8 @@ async function loadSpellDetails(url) {
           - ${spell.school.name}
         </em></p>
 
-        <p><strong>Temps d'incantation :</strong> ${spell.casting_time}</p>
-        <p><strong>Portée :</strong> ${spell.range}</p>
-        <p><strong>Durée :</strong> ${spell.duration}</p>
-        <p><strong>Composants :</strong> ${spell.components.join(", ")}</p>
+        <!-- Stats du sort (WebComponent) -->
+        <dnd-stat-grid id="spellStats"></dnd-stat-grid>
 
         <h3>Description</h3>
         <p>${description}</p>
@@ -121,6 +119,31 @@ async function loadSpellDetails(url) {
         <p><strong>Classes :</strong> ${spell.classes.map((c) => c.name).join(", ")}</p>
       </div>
     `;
+
+    // Peupler le composant stat-grid avec les stats du sort
+    const statGrid = spellResult.querySelector("#spellStats");
+    statGrid.stats = [
+      {
+        label: "Incantation",
+        value: spell.casting_time,
+        tooltip: "Temps nécessaire pour lancer le sort",
+      },
+      {
+        label: "Portée",
+        value: spell.range,
+        tooltip: "Distance maximale d'effet du sort",
+      },
+      {
+        label: "Durée",
+        value: spell.duration,
+        tooltip: "Durée de l'effet du sort",
+      },
+      {
+        label: "Composants",
+        value: spell.components.join(", "),
+        tooltip: "V=Verbal, S=Somatique, M=Matériel",
+      },
+    ];
   } catch (error) {
     spellResult.innerHTML = "Erreur lors du chargement du sort.";
   }

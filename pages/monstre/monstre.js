@@ -67,11 +67,6 @@ function formatSpeed(speed) {
     .join(", ");
 }
 
-function formatModifier(score) {
-  const mod = Math.floor((score - 10) / 2);
-  return mod >= 0 ? `+${mod}` : mod;
-}
-
 function formatList(list) {
   if (!list || list.length === 0) return "None";
   return `<ul>${list
@@ -131,27 +126,8 @@ async function searchMonster(monsterName) {
           )}</p>
         </div>
 
-        <!-- Caractéristiques avec modificateurs -->
-        <div class="ability-scores">
-          <div class="ability"><strong class="tooltip" data-tooltip="Strength (STR) : Force physique.">STR</strong><span>${
-            monsterData.strength
-          } (${formatModifier(monsterData.strength)})</span></div>
-          <div class="ability"><strong class="tooltip" data-tooltip="Dexterity (DEX) : Agilité et coordination.">DEX</strong><span>${
-            monsterData.dexterity
-          } (${formatModifier(monsterData.dexterity)})</span></div>
-          <div class="ability"><strong class="tooltip" data-tooltip="Constitution (CON) : Endurance et vitalité.">CON</strong><span>${
-            monsterData.constitution
-          } (${formatModifier(monsterData.constitution)})</span></div>
-          <div class="ability"><strong class="tooltip" data-tooltip="Intelligence (INT) : Raisonnement et mémoire.">INT</strong><span>${
-            monsterData.intelligence
-          } (${formatModifier(monsterData.intelligence)})</span></div>
-          <div class="ability"><strong class="tooltip" data-tooltip="Wisdom (WIS) : Perception et intuition.">WIS</strong><span>${
-            monsterData.wisdom
-          } (${formatModifier(monsterData.wisdom)})</span></div>
-          <div class="ability"><strong class="tooltip" data-tooltip="Charisma (CHA) : Force de personnalité.">CHA</strong><span>${
-            monsterData.charisma
-          } (${formatModifier(monsterData.charisma)})</span></div>
-        </div>
+        <!-- Caractéristiques avec modificateurs (WebComponent) -->
+        <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
 
         <!-- Informations de jeu -->
         <div class="monster-details">
@@ -174,6 +150,10 @@ async function searchMonster(monsterName) {
         </div>
       </div>
     `;
+
+    // Peupler le composant stat-grid avec les ability scores
+    const statGrid = monsterResult.querySelector("#monsterStats");
+    statGrid.stats = DndStatGrid.createAbilityStats(monsterData);
   } catch (error) {
     console.error(error);
     monsterResult.innerHTML = "Erreur lors de la recherche.";
