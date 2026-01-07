@@ -180,12 +180,12 @@ class DndSoundPlayer extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>
-        /* Conteneur principal fixé au-dessus du dé */
+        /* Conteneur principal fixé à gauche pour éviter le chevauchement */
         :host {
           position: fixed;
-          bottom: 5rem; /* Positionné au-dessus du dé (60px + marge) */
-          right: 2rem;
-          z-index: 1001; /* Au-dessus du lanceur de dés */
+          bottom: 2rem;
+          left: 2rem;
+          z-index: 1000; /* Même niveau que le lanceur de dés */
           font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
@@ -194,7 +194,7 @@ class DndSoundPlayer extends HTMLElement {
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          background: linear-gradient(135deg, #4CAF50, #45a049);
+          background: linear-gradient(135deg, #e63946, #d62828);
           color: white;
           border: none;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -215,7 +215,7 @@ class DndSoundPlayer extends HTMLElement {
         .mixer {
           position: absolute;
           bottom: 70px;
-          right: 0;
+          left: 0;
           width: 320px;
           max-height: 400px;
           background: rgba(255, 255, 255, 0.95);
@@ -233,7 +233,7 @@ class DndSoundPlayer extends HTMLElement {
           color: #1d3557;
           font-size: 1.2rem;
           text-align: center;
-          border-bottom: 2px solid #4CAF50;
+          border-bottom: 2px solid #e63946;
           padding-bottom: 0.5rem;
         }
 
@@ -277,14 +277,14 @@ class DndSoundPlayer extends HTMLElement {
 
         .sound-btn:hover {
           background: #e9ecef;
-          border-color: #4CAF50;
+          border-color: #e63946;
           transform: translateY(-1px);
         }
 
         .sound-btn.playing {
-          background: #4CAF50;
+          background: #e63946;
           color: white;
-          border-color: #45a049;
+          border-color: #d62828;
           animation: pulse 1.5s infinite;
         }
 
@@ -333,12 +333,12 @@ class DndSoundPlayer extends HTMLElement {
         }
 
         .mixer::-webkit-scrollbar-thumb {
-          background: rgba(76, 175, 80, 0.5);
+          background: rgba(230, 57, 70, 0.5);
           border-radius: 3px;
         }
 
         .mixer::-webkit-scrollbar-thumb:hover {
-          background: rgba(76, 175, 80, 0.7);
+          background: rgba(230, 57, 70, 0.7);
         }
       </style>
 
