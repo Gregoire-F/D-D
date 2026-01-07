@@ -17,6 +17,10 @@
  * @cssprop {color} [--dnd-primary-color=#8b0000] - Couleur principale (bordures, labels)
  * @cssprop {color} [--dnd-text-color=#333] - Couleur du texte des valeurs
  * @cssprop {url} [--dnd-tooltip-image] - Image de fond des tooltips (parchemin)
+ * @cssprop {string} [--dnd-tooltip-font='Cinzel', 'MedievalSharp', serif] - Police des tooltips
+ *
+ * @requires Google Fonts - Les polices Cinzel et MedievalSharp sont chargées automatiquement
+ * par le composant (injection unique dans le document) pour garantir un affichage cohérent des tooltips.
  *
  * @fires Aucun événement émis par ce composant
  *
@@ -46,6 +50,9 @@
  * </script>
  */
 class DndStatGrid extends HTMLElement {
+  /** @private {boolean} Flag pour éviter l'injection multiple des polices */
+  static _fontsLoaded = false;
+
   /**
    * Liste des attributs observés par le composant.
    * Lorsque ces attributs changent, attributeChangedCallback est appelé.
@@ -53,6 +60,39 @@ class DndStatGrid extends HTMLElement {
    */
   static get observedAttributes() {
     return ['stats'];
+  }
+
+  /**
+   * Injecte les polices Google Fonts dans le document (une seule fois).
+   * Utilise des balises <link> pour un chargement optimisé et non-bloquant.
+   * @private
+   * @static
+   */
+  static _loadFonts() {
+    if (DndStatGrid._fontsLoaded) return;
+
+    const head = document.head;
+
+    // Preconnect pour optimiser le chargement
+    const preconnectGoogle = document.createElement('link');
+    preconnectGoogle.rel = 'preconnect';
+    preconnectGoogle.href = 'https://fonts.googleapis.com';
+
+    const preconnectGstatic = document.createElement('link');
+    preconnectGstatic.rel = 'preconnect';
+    preconnectGstatic.href = 'https://fonts.gstatic.com';
+    preconnectGstatic.crossOrigin = 'anonymous';
+
+    // Stylesheet des polices
+    const fontStylesheet = document.createElement('link');
+    fontStylesheet.rel = 'stylesheet';
+    fontStylesheet.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=MedievalSharp&display=swap';
+
+    head.appendChild(preconnectGoogle);
+    head.appendChild(preconnectGstatic);
+    head.appendChild(fontStylesheet);
+
+    DndStatGrid._fontsLoaded = true;
   }
 
   /**
@@ -64,6 +104,9 @@ class DndStatGrid extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     /** @private {Array<StatObject>} Tableau des statistiques à afficher */
     this._stats = [];
+
+    // Charger les polices une seule fois pour tout le document
+    DndStatGrid._loadFonts();
   }
 
   /**
@@ -148,6 +191,8 @@ class DndStatGrid extends HTMLElement {
       <style>
         /* ========================================
          * STYLES DU CONTENEUR
+         * Note: Les polices Google Fonts (Cinzel, MedievalSharp) sont
+         * injectées dynamiquement dans le document par _loadFonts()
          * ======================================== */
         :host {
           display: block;
@@ -220,7 +265,7 @@ class DndStatGrid extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
-          font-family: 'Cinzel', 'MedievalSharp', serif;
+          font-family: var(--dnd-tooltip-font, 'Cinzel', 'MedievalSharp', serif);
           font-size: 11px;
           font-weight: 600;
           white-space: normal;
