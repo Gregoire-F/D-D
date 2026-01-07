@@ -5,28 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recherche Items D&D</title>
     <link rel="stylesheet" href="../../style.css" />
+
+    <!-- WebComponents -->
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
   </head>
   <body>
     <div class="container">
       <h1>Grimoire d'Items</h1>
 
-      <input
-        type="text"
-        id="monsterInput"
+      <dnd-search-bar
+        id="searchBar"
         placeholder="Rechercher (ex: Dagger, Shield)..."
-      />
+        button-text="Rechercher"
+      ></dnd-search-bar>
 
-      <button id="searchButton">Rechercher</button>
-
-      <div
-        class="dropdown-container"
-        style="display: none"
-        id="dropdownWrapper"
-      >
-        <select id="monsterSelect">
-          <option value="">-- Choisir un item --</option>
-        </select>
-      </div>
+      <dnd-dropdown
+        id="itemDropdown"
+        placeholder="-- Choisir un item --"
+        hidden
+      ></dnd-dropdown>
 
       <div class="monster-result" id="resultArea"></div>
     </div>

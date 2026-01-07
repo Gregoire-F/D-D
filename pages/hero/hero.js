@@ -1,113 +1,131 @@
 // ========================================
 // DÉCLARATION DES VARIABLES DOM
 // ========================================
-const heroInput = document.getElementById("heroInput");
-const searchButton = document.getElementById("searchButton");
+const searchBar = document.getElementById("searchBar");
+const heroDropdown = document.getElementById("heroDropdown");
 const heroResult = document.getElementById("heroResult");
-const heroSelect = document.getElementById("heroSelect");
+
+// Cache des classes
+let allClasses = [];
 
 // ========================================
 // CHARGEMENT INITIAL
 // ========================================
-window.addEventListener("DOMContentLoaded", () => {
-    fetch(`https://www.dnd5eapi.co/api/2014/classes`)
-        .then((response) => response.json())
-        .then((data) => {
-            const classes = data.results.sort((a, b) => a.name.localeCompare(b.name));
-            classes.forEach((cls) => {
-                const option = document.createElement("option");
-                option.value = cls.index; // On utilise l'index (ex: "barbarian") pour l'image
-                option.textContent = cls.name;
-                heroSelect.appendChild(option);
-            });
-        })
-        .catch((error) => console.error("Erreur menu :", error));
+window.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const response = await fetch("https://www.dnd5eapi.co/api/2014/classes");
+    const data = await response.json();
+
+    allClasses = data.results.sort((a, b) => a.name.localeCompare(b.name));
+
+    const options = allClasses.map((cls) => ({
+      value: cls.index,
+      label: cls.name,
+    }));
+    heroDropdown.setOptions(options);
+  } catch (error) {
+    console.error("Erreur lors du chargement :", error);
+  }
 });
 
 // ========================================
-// GESTION DES ÉVÉNEMENTS
+// GESTION DES ÉVÉNEMENTS (WebComponents)
 // ========================================
-searchButton.addEventListener("click", () => {
-    const query = heroInput.value.toLowerCase();
-    if (query) searchClass(query);
-    else heroResult.innerHTML = "Veuillez entrer une classe.";
+searchBar.addEventListener("dnd-search", (e) => {
+  const query = e.detail.query.toLowerCase();
+  if (query) {
+    searchClass(query);
+  } else {
+    heroResult.innerHTML = "Veuillez entrer une classe.";
+  }
 });
 
-heroSelect.addEventListener("change", (e) => {
-    const query = e.target.value;
-    if (query) {
-        heroInput.value = e.target.options[e.target.selectedIndex].text;
-        searchClass(query);
-    }
+heroDropdown.addEventListener("dnd-select", (e) => {
+  const { value, label } = e.detail;
+  if (value) {
+    searchBar.value = label;
+    searchClass(value);
+  }
 });
 
 // ========================================
 // FONCTIONS DE FORMATAGE
 // ========================================
 function formatProficiencies(profs) {
-    if (!profs || profs.length === 0) return "Aucune";
-    return profs.map(p => p.name).join(", ");
+  if (!profs || profs.length === 0) return "Aucune";
+  return profs.map((p) => p.name).join(", ");
 }
 
 function formatList(list) {
-    if (!list || list.length === 0) return "Aucun";
-    return `<ul>${list.map(item => `<li>${item.name || item.equipment?.name}</li>`).join("")}</ul>`;
+  if (!list || list.length === 0) return "Aucun";
+  return `<ul>${list
+    .map((item) => `<li>${item.name || item.equipment?.name}</li>`)
+    .join("")}</ul>`;
 }
 
 // ========================================
 // FONCTION PRINCIPALE
 // ========================================
-function searchClass(indexOrName) {
-    heroResult.innerHTML = "Recherche en cours...";
+async function searchClass(indexOrName) {
+  heroResult.innerHTML = "Recherche en cours...";
 
-    // On cherche d'abord la classe pour être sûr d'avoir la bonne URL
-    fetch(`https://www.dnd5eapi.co/api/2014/classes/${indexOrName}`)
-        .then((response) => {
-            if (!response.ok) throw new Error("Classe non trouvée");
-            return response.json();
-        })
-        .then((heroData) => {
+  try {
+    const response = await fetch(
+      `https://www.dnd5eapi.co/api/2014/classes/${indexOrName}`
+    );
 
-            // --- GESTION INTELLIGENTE DE L'IMAGE ---
-            // 1. On essaie de trouver l'image dans un dossier "images/classes" à la racine
-            // 2. Si ça échoue (onerror), on met une image générée automatiquement avec le nom
-            const imagePath = `../../images/classes/${heroData.index}.jpg`;
-            const placeholder = `https://placehold.co/600x400/8b0000/FFF?text=${heroData.name}`;
+    if (!response.ok) {
+      throw new Error("Classe non trouvée");
+    }
 
-            heroResult.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
-                <h2>${heroData.name}</h2>
-                <p><em>Class (Héros) - Hit Die: d${heroData.hit_die}</em></p>
-            </div>
+    const heroData = await response.json();
 
-            <img src="${imagePath}" 
-                 alt="${heroData.name}" 
-                 class="monster-image"
-                 onerror="this.onerror=null; this.src='${placeholder}';">
+    // Gestion de l'image
+    const imagePath = `../../images/classes/${heroData.index}.jpg`;
+    const placeholder = `https://placehold.co/600x400/8b0000/FFF?text=${heroData.name}`;
 
-            <div class="monster-stats-top">
-                <p><strong>Hit Die:</strong> 1d${heroData.hit_die} par niveau</p>
-                <p><strong>Saving Throws:</strong> ${heroData.saving_throws.map(s => s.name).join(", ")}</p>
-            </div>
-
-            <div class="monster-details">
-                <p><strong>Proficiencies:</strong> ${formatProficiencies(heroData.proficiencies)}</p>
-            </div>
-
-            <div class="monster-actions">
-                <h3>Starting Equipment</h3>
-                ${formatList(heroData.starting_equipment)}
-
-                ${heroData.subclasses && heroData.subclasses.length > 0
-                    ? `<h3>Subclasses</h3>${formatList(heroData.subclasses)}`
-                    : ""}
-            </div>
+    heroResult.innerHTML = `
+      <div class="monster-card">
+        <div class="monster-header">
+          <h2>${heroData.name}</h2>
+          <p><em>Class (Héros) - Hit Die: d${heroData.hit_die}</em></p>
         </div>
-      `;
-        })
-        .catch((error) => {
-            console.error(error);
-            heroResult.innerHTML = "Classe non trouvée. Essayez le nom anglais (ex: Wizard).";
-        });
+
+        <img
+          src="${imagePath}"
+          alt="${heroData.name}"
+          class="monster-image"
+          onerror="this.onerror=null; this.src='${placeholder}';"
+        />
+
+        <div class="monster-stats-top">
+          <p><strong>Hit Die:</strong> 1d${heroData.hit_die} par niveau</p>
+          <p><strong>Saving Throws:</strong> ${heroData.saving_throws
+            .map((s) => s.name)
+            .join(", ")}</p>
+        </div>
+
+        <div class="monster-details">
+          <p><strong>Proficiencies:</strong> ${formatProficiencies(
+            heroData.proficiencies
+          )}</p>
+        </div>
+
+        <div class="monster-actions">
+          <h3>Starting Equipment</h3>
+          ${formatList(heroData.starting_equipment)}
+
+          ${
+            heroData.subclasses && heroData.subclasses.length > 0
+              ? `<h3>Subclasses</h3>${formatList(heroData.subclasses)}`
+              : ""
+          }
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    console.error(error);
+    heroResult.innerHTML =
+      "Classe non trouvée. Essayez le nom anglais (ex: Wizard).";
+  }
 }

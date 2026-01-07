@@ -1,14 +1,18 @@
 const BASE_URL = "https://www.dnd5eapi.co";
-let globalItems = [];
 
-// Récupération des éléments du DOM
-const searchInput = document.getElementById("monsterInput");
-const searchBtn = document.getElementById("searchButton");
-const select = document.getElementById("monsterSelect");
-const dropdownWrapper = document.getElementById("dropdownWrapper");
+// ========================================
+// DÉCLARATION DES VARIABLES DOM
+// ========================================
+const searchBar = document.getElementById("searchBar");
+const itemDropdown = document.getElementById("itemDropdown");
 const resultArea = document.getElementById("resultArea");
 
-// 1. Chargement des données au démarrage
+// Cache des items
+let globalItems = [];
+
+// ========================================
+// CHARGEMENT INITIAL
+// ========================================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const [eqRes, magicRes] = await Promise.all([
@@ -27,52 +31,60 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// 2. Logique de recherche
-searchBtn.addEventListener("click", performSearch);
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") performSearch();
+// ========================================
+// GESTION DES ÉVÉNEMENTS (WebComponents)
+// ========================================
+searchBar.addEventListener("dnd-search", (e) => {
+  const query = e.detail.query;
+  if (query) {
+    performSearch(query);
+  }
 });
 
-function performSearch() {
-  const query = searchInput.value.toLowerCase().trim();
-  if (!query) return;
+itemDropdown.addEventListener("dnd-select", (e) => {
+  const { value } = e.detail;
+  if (value) {
+    fetchAndRenderItem(value);
+  }
+});
+
+// ========================================
+// LOGIQUE DE RECHERCHE
+// ========================================
+function performSearch(query) {
+  const lowerQuery = query.toLowerCase().trim();
+  if (!lowerQuery) return;
 
   // Filtrer
   const matches = globalItems.filter((item) =>
-    item.name.toLowerCase().includes(query)
+    item.name.toLowerCase().includes(lowerQuery)
   );
 
   // Reset UI
   resultArea.innerHTML = "";
-  select.innerHTML = '<option value="">-- Choisir un item --</option>';
+  itemDropdown.clear();
 
   if (matches.length === 0) {
     resultArea.innerHTML = "<p>Aucun item trouvé.</p>";
-    dropdownWrapper.style.display = "none";
+    itemDropdown.hide();
   } else if (matches.length === 1) {
     // Un seul résultat : on affiche direct
-    dropdownWrapper.style.display = "none";
+    itemDropdown.hide();
     fetchAndRenderItem(matches[0].url);
   } else {
-    // Plusieurs résultats : on remplit le select
-    dropdownWrapper.style.display = "block";
-    matches.forEach((item) => {
-      const opt = document.createElement("option");
-      opt.value = item.url;
-      opt.textContent = item.name;
-      select.appendChild(opt);
-    });
+    // Plusieurs résultats : on remplit le dropdown
+    const options = matches.map((item) => ({
+      value: item.url,
+      label: item.name,
+    }));
+    itemDropdown.setOptions(options);
+    itemDropdown.show();
   }
 }
 
-// 3. Changement dans le dropdown
-select.addEventListener("change", () => {
-  if (select.value) {
-    fetchAndRenderItem(select.value);
-  }
-});
-
-// 4. Fetch et Affichage de la Carte
+// ========================================
+// FETCH ET AFFICHAGE
+// ========================================
 async function fetchAndRenderItem(urlSuffix) {
   resultArea.innerHTML = "<p>Chargement des détails...</p>";
   try {
@@ -84,14 +96,12 @@ async function fetchAndRenderItem(urlSuffix) {
   }
 }
 
-// 5. Création du HTML selon le CSS "Monster"
 function renderCard(item) {
-  // Extraction des données pour adapter au CSS
   const type = item.equipment_category ? item.equipment_category.name : "Objet";
   const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
   const weight = item.weight ? `${item.weight} lb` : "-";
 
-  // Logique pour la 3ème stat (AC ou Dégâts)
+  // Logique pour la 3ème stat
   let stat3Label = "Info";
   let stat3Value = "-";
 
@@ -107,38 +117,36 @@ function renderCard(item) {
     stat3Value = item.rarity.name;
   }
 
-  // Construction HTML
   let html = `
-                <div class="monster-card">
-                    <div class="monster-header">
-                        <h2>${item.name}</h2>
-                        <p>${type}</p>
-                    </div>
-                    
-                    <div class="monster-stats-top">
-                        <p><strong>Catégorie :</strong> ${type}</p>
-                    </div>
+    <div class="monster-card">
+      <div class="monster-header">
+        <h2>${item.name}</h2>
+        <p>${type}</p>
+      </div>
 
-                    <div class="ability-scores">
-                        <div class="ability">
-                            <strong>Coût</strong>
-                            <span>${cost}</span>
-                        </div>
-                        <div class="ability">
-                            <strong>Poids</strong>
-                            <span>${weight}</span>
-                        </div>
-                        <div class="ability">
-                            <strong>${stat3Label}</strong>
-                            <span>${stat3Value}</span>
-                        </div>
-                    </div>
+      <div class="monster-stats-top">
+        <p><strong>Catégorie :</strong> ${type}</p>
+      </div>
 
-                    <div class="monster-actions">
-                        <h3>Description & Propriétés</h3>
-                        <ul>`;
+      <div class="ability-scores">
+        <div class="ability">
+          <strong>Coût</strong>
+          <span>${cost}</span>
+        </div>
+        <div class="ability">
+          <strong>Poids</strong>
+          <span>${weight}</span>
+        </div>
+        <div class="ability">
+          <strong>${stat3Label}</strong>
+          <span>${stat3Value}</span>
+        </div>
+      </div>
 
-  // Ajout de la description
+      <div class="monster-actions">
+        <h3>Description & Propriétés</h3>
+        <ul>`;
+
   if (item.desc && item.desc.length > 0) {
     item.desc.forEach((line) => {
       html += `<li>${line}</li>`;
@@ -147,7 +155,6 @@ function renderCard(item) {
     html += `<li>Pas de description détaillée disponible.</li>`;
   }
 
-  // Ajout des propriétés spéciales (avec tooltip du CSS si possible)
   if (item.properties && item.properties.length > 0) {
     html += `<li><strong>Propriétés: </strong>`;
     html += item.properties
@@ -159,9 +166,7 @@ function renderCard(item) {
     html += `</li>`;
   }
 
-  html += `   </ul>
-                    </div>
-                </div>`;
+  html += `</ul></div></div>`;
 
   resultArea.innerHTML = html;
 }

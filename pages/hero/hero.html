@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../style.css" />
     <title>Recherche de Héros (Classes)</title>
-</head>
 
-<body>
+    <!-- WebComponents -->
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
     <div class="container">
-        <h1>Recherche de Classes (Héros)</h1>
-        <input type="text" id="heroInput" placeholder="Entrez une classe (ex: Wizard, Barbarian)" />
-        <button id="searchButton">Rechercher</button>
-        <div class="dropdown-container">
-            <select id="heroSelect">
-                <option value="">-- Choisissez une classe --</option>
-            </select>
-        </div>
-        <div id="heroResult" class="monster-result"></div>
-    </div>
-    <script src="hero.js"></script>
-</body>
+      <h1>Recherche de Classes (Héros)</h1>
 
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez une classe (ex: Wizard, Barbarian)"
+        button-text="Rechercher"
+      ></dnd-search-bar>
+
+      <dnd-dropdown
+        id="heroDropdown"
+        placeholder="-- Choisissez une classe --"
+      ></dnd-dropdown>
+
+      <div id="heroResult" class="monster-result"></div>
+    </div>
+
+    <script src="hero.js"></script>
+  </body>
 </html>
