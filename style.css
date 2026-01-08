@@ -162,7 +162,7 @@ h1 {
   left: 50%;
   transform: translateX(-50%) scaleY(0);
   background-color: transparent;
-  background-image: url('images/parchemin-aide.png');
+  background-image: url("assets/images/parchemin-aide.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -170,7 +170,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cinzel', 'MedievalSharp', serif;
+  font-family: "Cinzel", "MedievalSharp", serif;
   font-size: 11px;
   font-weight: 600;
   white-space: normal;
@@ -234,7 +234,7 @@ h1 {
     transform: translateX(-50%) scaleY(0);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: transparent;
-    background-image: url('images/parchemin-aide.png');
+    background-image: url("images/parchemin-aide.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
@@ -257,6 +257,198 @@ h1 {
     bottom: 108%;
     transform: translateX(-50%) scale(1);
   }
+}
 
+/* ========================================
+// TABLEAUX MARKDOWN (DndMarkdown)
+// Styles globaux pour les tableaux générés
+// ======================================== */
+.dnd-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+  font-size: 13px;
+  background: #fff;
+  border: 2px solid #8b0000;
+  border-radius: 4px;
+  overflow: hidden;
+}
 
+.dnd-table th,
+.dnd-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.dnd-table th {
+  background-color: #8b0000;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.dnd-table tbody tr:nth-child(even) {
+  background-color: #f9f3e8;
+}
+
+.dnd-table tbody tr:hover {
+  background-color: #fdf1dc;
+}
+
+.dnd-table td {
+  color: #333;
+}
+
+/* Titres Markdown dans les descriptions */
+.monster-card h4,
+.monster-card h5 {
+  color: #8b0000;
+  margin: 15px 0 8px 0;
+  font-size: 14px;
+}
+
+.monster-card h5 {
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* ========================================
+// LISTE DES SORTS (Classes)
+// ======================================== */
+.spells-section {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.spells-section h4 {
+  color: #8b0000;
+  margin: 15px 0 8px 0;
+  font-size: 14px;
+  border-bottom: 1px solid #8b0000;
+  padding-bottom: 4px;
+}
+
+.spell-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spell-list li {
+  margin: 0;
+}
+
+.spell-link {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid #8b0000;
+  border-radius: 15px;
+  color: #8b0000;
+  text-decoration: none;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.spell-link:hover {
+  background: #8b0000;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ========================================
+// MODAL SORT (Détails)
+// ======================================== */
+.spell-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.spell-modal-content {
+  background: #fdf1dc;
+  border: 4px solid #8b0000;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.spell-modal-content .spell-card {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.spell-modal-content h2 {
+  color: #8b0000;
+  margin: 0 0 10px 0;
+  padding-right: 30px;
+}
+
+.spell-modal-content h3 {
+  color: #8b0000;
+  border-bottom: 1px solid #8b0000;
+  margin: 15px 0 10px 0;
+  padding-bottom: 5px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #8b0000;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #a00;
+}
+
+/* Scrollbar personnalisée pour la section sorts */
+.spells-section::-webkit-scrollbar,
+.spell-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.spells-section::-webkit-scrollbar-track,
+.spell-modal-content::-webkit-scrollbar-track {
+  background: #f0e6d3;
+  border-radius: 4px;
+}
+
+.spells-section::-webkit-scrollbar-thumb,
+.spell-modal-content::-webkit-scrollbar-thumb {
+  background: #8b0000;
+  border-radius: 4px;
+}
+
+.spells-section::-webkit-scrollbar-thumb:hover,
+.spell-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #a00;
 }
