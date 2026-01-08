@@ -81,11 +81,18 @@ async function loadSpellDetails(url) {
       ? DndMarkdown.parseArray(spell.higher_level)
       : "";
 
+    const classesLinks = spell.classes
+      .map(
+        (c) =>
+          `<a href="../hero/hero.html?class=${c.index}" class="class-link">${c.name}</a>`
+      )
+      .join(", ");
+
     spellResult.innerHTML = `
       <div class="spell-card">
         <h2>${spell.name}</h2>
         <p><em>
-          ${spell.level === 0 ? "Cantrip" : "Niveau " + spell.level}
+          ${spell.level === 0 ? "Sortilège" : "Niveau " + spell.level}
           - ${spell.school.name}
         </em></p>
 
@@ -97,9 +104,7 @@ async function loadSpellDetails(url) {
 
         ${higherLevel ? `<h3>À plus haut niveau</h3><p>${higherLevel}</p>` : ""}
 
-        <p><strong>Classes :</strong> ${spell.classes
-          .map((c) => c.name)
-          .join(", ")}</p>
+        <p><strong>Classes :</strong> ${classesLinks}</p>
       </div>
     `;
 

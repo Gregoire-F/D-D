@@ -23,6 +23,15 @@ window.addEventListener("DOMContentLoaded", async () => {
       label: cls.name,
     }));
     heroDropdown.setOptions(options);
+
+    // GESTION DU PARAMÈTRE D'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const classToLoad = urlParams.get("class");
+
+    if (classToLoad) {
+      searchBar.value = classToLoad;
+      searchClass(classToLoad);
+    }
   } catch (error) {
     console.error("Erreur lors du chargement :", error);
   }
@@ -102,7 +111,7 @@ function formatSpellsByLevel(groupedSpells) {
   }
 
   const levelNames = {
-    0: "Cantrips (Niveau 0)",
+    0: "Sortilèges (Niveau 0)",
     1: "Niveau 1",
     2: "Niveau 2",
     3: "Niveau 3",
@@ -157,7 +166,7 @@ async function showSpellDetails(spellUrl) {
         <button class="modal-close" onclick="closeSpellModal()">&times;</button>
         <h2>${spell.name}</h2>
         <p><em>
-          ${spell.level === 0 ? "Cantrip" : "Niveau " + spell.level}
+          ${spell.level === 0 ? "Sortilège" : "Niveau " + spell.level}
           - ${spell.school.name}
         </em></p>
 
