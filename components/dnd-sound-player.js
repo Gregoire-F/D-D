@@ -341,8 +341,54 @@ class DndSoundPlayer extends HTMLElement {
           border-radius: 3px;
         }
 
-        .mixer::-webkit-scrollbar-thumb:hover {
+.mixer::-webkit-scrollbar-thumb:hover {
           background: rgba(230, 57, 70, 0.7);
+        }
+
+        /* Adaptation mobile */
+        @media (max-width: 480px) {
+          :host {
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+          }
+
+          .mixer {
+            width: calc(100vw - 2rem);
+            max-width: none;
+            left: -1rem;
+            right: -1rem;
+            border-radius: 12px 12px 0 0;
+            padding: 1rem;
+          }
+
+          .sound-button {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+          }
+
+          .sounds-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .sound-btn {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .mixer {
+            width: calc(100vw - 1rem);
+            left: -0.5rem;
+            right: -0.5rem;
+            padding: 0.8rem;
+          }
+
+          :host {
+            left: 0.5rem;
+          }
         }
       </style>
 
