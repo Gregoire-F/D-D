@@ -7,6 +7,7 @@ const heroResult = document.getElementById("heroResult");
 
 // Cache des classes
 let allClasses = [];
+let currentHeroData = null;
 
 // ========================================
 // CHARGEMENT INITIAL
@@ -27,10 +28,25 @@ window.addEventListener("DOMContentLoaded", async () => {
     // GESTION DU PARAMÈTRE D'URL
     const urlParams = new URLSearchParams(window.location.search);
     const classToLoad = urlParams.get("class");
+    const subclassToLoad = urlParams.get("subclass");
 
     if (classToLoad) {
       searchBar.value = classToLoad;
       searchClass(classToLoad);
+    } else if (subclassToLoad) {
+      // Si on arrive via une sous-classe, on doit trouver sa classe parente
+      try {
+        const subResp = await fetch(
+          `https://www.dnd5eapi.co/api/2014/subclasses/${subclassToLoad}`
+        );
+        const subData = await subResp.json();
+        if (subData.class) {
+          searchClass(subData.class.index);
+          searchBar.value = subData.class.name;
+        }
+      } catch (err) {
+        console.error("Erreur sous-classe:", err);
+      }
     }
   } catch (error) {
     console.error("Erreur lors du chargement :", error);
@@ -161,6 +177,24 @@ async function showSpellDetails(spellUrl) {
       ? DndMarkdown.parseArray(spell.higher_level)
       : "";
 
+    const damageType = spell.damage?.damage_type?.name || "N/A";
+    const saveType = spell.dc?.dc_type?.name || "N/A";
+
+    // Vérification de la compétence de sauvegarde du héros
+    const isProficientInSave = currentHeroData?.saving_throws.some(
+      (s) => s.name.toLowerCase() === saveType.toLowerCase()
+    );
+
+    // Vérification sommaire du matériel (Focus ou Sacoche)
+    const hasFocusOrPouch = currentHeroData?.starting_equipment.some((eq) => {
+      const name = eq.equipment.name.toLowerCase();
+      return (
+        name.includes("focus") ||
+        name.includes("pouch") ||
+        name.includes("symbol")
+      );
+    });
+
     modalContent.innerHTML = `
       <div class="spell-card">
         <button class="modal-close" onclick="closeSpellModal()">&times;</button>
@@ -171,6 +205,24 @@ async function showSpellDetails(spellUrl) {
         </em></p>
 
         <dnd-stat-grid id="modalSpellStats"></dnd-stat-grid>
+
+        <div class="spell-extra-info">
+          <p><strong>Type de Dégâts :</strong> ${damageType}</p>
+          <p><strong>Jet de Sauvegarde :</strong> ${saveType} 
+            ${
+              isProficientInSave
+                ? `<span class="check-success" title="Votre héros est entraîné à résister à ce type d'effet !">✔ Maîtrisé !</span>`
+                : ""
+            }
+          </p>
+          <p><strong>Matériel requis :</strong> 
+            ${
+              hasFocusOrPouch
+                ? `<span class="check-success">✔ Équipement de base OK</span>`
+                : `<span class="check-warning">⚠ Composants à vérifier</span>`
+            }
+          </p>
+        </div>
 
         <h3>Description</h3>
         <p>${description}</p>
@@ -232,6 +284,7 @@ async function searchClass(indexOrName) {
     }
 
     const heroData = await response.json();
+    currentHeroData = heroData; // Sauvegarder pour le modal des sorts
 
     // Charger les sorts de la classe en parallèle
     const spells = await fetchClassSpells(heroData.index);
@@ -291,6 +344,9 @@ async function searchClass(indexOrName) {
 
     // Peupler le composant stat-grid avec les infos de la classe
     const statGrid = heroResult.querySelector("#heroStats");
+    const spellAbility =
+      heroData.spellcasting?.spellcasting_ability?.name || "N/A";
+
     statGrid.stats = [
       {
         label: "Hit Die",
@@ -306,6 +362,11 @@ async function searchClass(indexOrName) {
         label: "Sorts",
         value: String(spellCount),
         tooltip: "Nombre de sorts disponibles pour cette classe",
+      },
+      {
+        label: "Incantation",
+        value: spellAbility,
+        tooltip: "Caractéristique utilisée pour lancer des sorts",
       },
     ];
 

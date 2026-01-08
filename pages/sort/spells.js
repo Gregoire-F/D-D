@@ -88,6 +88,19 @@ async function loadSpellDetails(url) {
       )
       .join(", ");
 
+    const subclassesLinks =
+      spell.subclasses && spell.subclasses.length > 0
+        ? spell.subclasses
+            .map(
+              (s) =>
+                `<a href="../hero/hero.html?subclass=${s.index}" class="class-link">${s.name}</a>`
+            )
+            .join(", ")
+        : "Aucune";
+
+    const damageType = spell.damage?.damage_type?.name || "N/A";
+    const saveType = spell.dc?.dc_type?.name || "N/A";
+
     spellResult.innerHTML = `
       <div class="spell-card">
         <h2>${spell.name}</h2>
@@ -99,12 +112,18 @@ async function loadSpellDetails(url) {
         <!-- Stats du sort (WebComponent) -->
         <dnd-stat-grid id="spellStats"></dnd-stat-grid>
 
+        <div class="spell-extra-info">
+          <p><strong>Type de Dégâts :</strong> ${damageType}</p>
+          <p><strong>Jet de Sauvegarde :</strong> ${saveType}</p>
+        </div>
+
         <h3>Description</h3>
         <p>${description}</p>
 
         ${higherLevel ? `<h3>À plus haut niveau</h3><p>${higherLevel}</p>` : ""}
 
         <p><strong>Classes :</strong> ${classesLinks}</p>
+        <p><strong>Sous-classes :</strong> ${subclassesLinks}</p>
       </div>
     `;
 
