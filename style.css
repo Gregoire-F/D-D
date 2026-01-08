@@ -162,7 +162,7 @@ h1 {
   left: 50%;
   transform: translateX(-50%) scaleY(0);
   background-color: transparent;
-  background-image: url('images/parchemin-aide.png');
+  background-image: url("assets/images/parchemin-aide.png");
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -170,7 +170,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cinzel', 'MedievalSharp', serif;
+  font-family: "Cinzel", "MedievalSharp", serif;
   font-size: 11px;
   font-weight: 600;
   white-space: normal;
@@ -234,7 +234,7 @@ h1 {
     transform: translateX(-50%) scaleY(0);
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     background-color: transparent;
-    background-image: url('images/parchemin-aide.png');
+    background-image: url("images/parchemin-aide.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;

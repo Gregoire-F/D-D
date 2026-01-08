@@ -29,52 +29,52 @@ class DndSoundPlayer extends HTMLElement {
     // Liste des sons détectés avec leurs catégories et icônes
     this.sounds = [
       // Catégorie Ambiance
-      { 
-        name: "Village Médiéval", 
-        file: "sound/ambiance/medieval_village_atmosphere.mp3", 
+      {
+        name: "Village Médiéval",
+        file: "assets/sound/ambiance/medieval_village_atmosphere.mp3",
         category: "Ambiance",
-        icon: "🏘️"
+        icon: "🏘️",
       },
-      { 
-        name: "Caverne du Dragon", 
-        file: "sound/ambiance/Caverne-dragon.mp3", 
+      {
+        name: "Caverne du Dragon",
+        file: "assets/sound/ambiance/Caverne-dragon.mp3",
         category: "Ambiance",
-        icon: "🗻"
+        icon: "🗻",
       },
-      
+
       // Catégorie Combat
-      { 
-        name: "Coup d'Épée", 
-        file: "sound/combat/coup-epee.mp3", 
+      {
+        name: "Coup d'Épée",
+        file: "assets/sound/combat/coup-epee.mp3",
         category: "Combat",
-        icon: "⚔️"
+        icon: "⚔️",
       },
-      { 
-        name: "Souffle de Dragon", 
-        file: "sound/combat/dragon-breathing-fire.mp3", 
+      {
+        name: "Souffle de Dragon",
+        file: "assets/sound/combat/dragon-breathing-fire.mp3",
         category: "Combat",
-        icon: "🔥"
+        icon: "🔥",
       },
-      
+
       // Catégorie Autre
-      { 
-        name: "Échec", 
-        file: "sound/autre/echec.mp3", 
+      {
+        name: "Échec",
+        file: "assets/sound/autre/echec.mp3",
         category: "Autre",
-        icon: "❌"
+        icon: "❌",
       },
-      { 
-        name: "Victoire", 
-        file: "sound/autre/victoire.mp3", 
+      {
+        name: "Victoire",
+        file: "assets/sound/autre/victoire.mp3",
         category: "Autre",
-        icon: "🏆"
+        icon: "🏆",
       },
-      { 
-        name: "Lancé de Dés", 
-        file: "sound/autre/lancé-de-dés.mp3", 
+      {
+        name: "Lancé de Dés",
+        file: "assets/sound/autre/lance-de-des.mp3",
         category: "Autre",
-        icon: "🎲"
-      }
+        icon: "🎲",
+      },
     ];
   }
 
@@ -99,13 +99,13 @@ class DndSoundPlayer extends HTMLElement {
     // Créer ou récupérer l'élément audio
     if (!this.audioElements[soundFile]) {
       this.audioElements[soundFile] = new Audio(soundFile);
-      this.audioElements[soundFile].addEventListener('ended', () => {
+      this.audioElements[soundFile].addEventListener("ended", () => {
         this.currentlyPlaying = null;
         this.updatePlayingIndicator(null);
       });
-      
+
       // Ajouter la gestion d'erreurs
-      this.audioElements[soundFile].addEventListener('error', (e) => {
+      this.audioElements[soundFile].addEventListener("error", (e) => {
         console.error(`Erreur de chargement pour ${soundFile}:`, e);
         alert(`Impossible de charger le son: ${soundName}`);
       });
@@ -113,17 +113,19 @@ class DndSoundPlayer extends HTMLElement {
 
     const audio = this.audioElements[soundFile];
     audio.currentTime = 0;
-    
+
     // Gérer la lecture avec gestion d'erreurs
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise.then(() => {
-        this.currentlyPlaying = audio;
-        this.updatePlayingIndicator(soundName);
-      }).catch(error => {
-        console.error(`Erreur de lecture pour ${soundFile}:`, error);
-        alert(`Impossible de jouer le son: ${soundName}`);
-      });
+      playPromise
+        .then(() => {
+          this.currentlyPlaying = audio;
+          this.updatePlayingIndicator(soundName);
+        })
+        .catch((error) => {
+          console.error(`Erreur de lecture pour ${soundFile}:`, error);
+          alert(`Impossible de jouer le son: ${soundName}`);
+        });
     }
   }
 
@@ -133,14 +135,16 @@ class DndSoundPlayer extends HTMLElement {
   updatePlayingIndicator(soundName) {
     if (this.shadowRoot) {
       // Retirer toutes les classes 'playing'
-      const buttons = this.shadowRoot.querySelectorAll('.sound-btn');
-      buttons.forEach(btn => btn.classList.remove('playing'));
-      
+      const buttons = this.shadowRoot.querySelectorAll(".sound-btn");
+      buttons.forEach((btn) => btn.classList.remove("playing"));
+
       // Ajouter la classe au bouton actif
       if (soundName) {
-        const activeBtn = this.shadowRoot.querySelector(`[data-sound-name="${soundName}"]`);
+        const activeBtn = this.shadowRoot.querySelector(
+          `[data-sound-name="${soundName}"]`
+        );
         if (activeBtn) {
-          activeBtn.classList.add('playing');
+          activeBtn.classList.add("playing");
         }
       }
     }
@@ -150,7 +154,7 @@ class DndSoundPlayer extends HTMLElement {
    * Arrête tous les sons
    */
   stopAllSounds() {
-    Object.values(this.audioElements).forEach(audio => {
+    Object.values(this.audioElements).forEach((audio) => {
       audio.pause();
       audio.currentTime = 0;
     });
@@ -163,7 +167,7 @@ class DndSoundPlayer extends HTMLElement {
    */
   groupSoundsByCategory() {
     const grouped = {};
-    this.sounds.forEach(sound => {
+    this.sounds.forEach((sound) => {
       if (!grouped[sound.category]) {
         grouped[sound.category] = [];
       }
@@ -351,21 +355,29 @@ class DndSoundPlayer extends HTMLElement {
       <div class="mixer fade-in">
         <h3>🎵 Table de Mixage D&D</h3>
         
-        ${Object.entries(groupedSounds).map(([category, sounds]) => `
+        ${Object.entries(groupedSounds)
+          .map(
+            ([category, sounds]) => `
           <div class="category">
             <div class="category-title">${category}</div>
             <div class="sounds-grid">
-              ${sounds.map(sound => `
+              ${sounds
+                .map(
+                  (sound) => `
                 <button class="sound-btn" 
                         data-sound-file="${sound.file}"
                         data-sound-name="${sound.name}">
                   <span>${sound.icon}</span>
                   <span>${sound.name}</span>
                 </button>
-              `).join('')}
+              `
+                )
+                .join("")}
             </div>
           </div>
-        `).join('')}
+        `
+          )
+          .join("")}
 
         <button class="stop-all-btn" onclick="this.getRootNode().host.stopAllSounds()">
           ⏹️ Arrêter tous les sons
@@ -378,10 +390,10 @@ class DndSoundPlayer extends HTMLElement {
       this.toggleMenu();
 
     // Attache les événements pour tous les boutons de sons
-    const soundButtons = this.shadowRoot.querySelectorAll('.sound-btn');
-    soundButtons.forEach(btn => {
-      const soundFile = btn.getAttribute('data-sound-file');
-      const soundName = btn.getAttribute('data-sound-name');
+    const soundButtons = this.shadowRoot.querySelectorAll(".sound-btn");
+    soundButtons.forEach((btn) => {
+      const soundFile = btn.getAttribute("data-sound-file");
+      const soundName = btn.getAttribute("data-sound-name");
       btn.onclick = () => this.playSound(soundFile, soundName);
     });
   }

@@ -59,7 +59,7 @@ class DndStatGrid extends HTMLElement {
    * @returns {string[]} Liste des noms d'attributs
    */
   static get observedAttributes() {
-    return ['stats'];
+    return ["stats"];
   }
 
   /**
@@ -74,19 +74,20 @@ class DndStatGrid extends HTMLElement {
     const head = document.head;
 
     // Preconnect pour optimiser le chargement
-    const preconnectGoogle = document.createElement('link');
-    preconnectGoogle.rel = 'preconnect';
-    preconnectGoogle.href = 'https://fonts.googleapis.com';
+    const preconnectGoogle = document.createElement("link");
+    preconnectGoogle.rel = "preconnect";
+    preconnectGoogle.href = "https://fonts.googleapis.com";
 
-    const preconnectGstatic = document.createElement('link');
-    preconnectGstatic.rel = 'preconnect';
-    preconnectGstatic.href = 'https://fonts.gstatic.com';
-    preconnectGstatic.crossOrigin = 'anonymous';
+    const preconnectGstatic = document.createElement("link");
+    preconnectGstatic.rel = "preconnect";
+    preconnectGstatic.href = "https://fonts.gstatic.com";
+    preconnectGstatic.crossOrigin = "anonymous";
 
     // Stylesheet des polices
-    const fontStylesheet = document.createElement('link');
-    fontStylesheet.rel = 'stylesheet';
-    fontStylesheet.href = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=MedievalSharp&display=swap';
+    const fontStylesheet = document.createElement("link");
+    fontStylesheet.rel = "stylesheet";
+    fontStylesheet.href =
+      "https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=MedievalSharp&display=swap";
 
     head.appendChild(preconnectGoogle);
     head.appendChild(preconnectGstatic);
@@ -101,7 +102,7 @@ class DndStatGrid extends HTMLElement {
    */
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
     /** @private {Array<StatObject>} Tableau des statistiques à afficher */
     this._stats = [];
 
@@ -125,7 +126,7 @@ class DndStatGrid extends HTMLElement {
    * @param {string|null} newValue - Nouvelle valeur
    */
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'stats' && oldValue !== newValue) {
+    if (name === "stats" && oldValue !== newValue) {
       this._parseStats();
       this.render();
     }
@@ -137,12 +138,12 @@ class DndStatGrid extends HTMLElement {
    * @private
    */
   _parseStats() {
-    const statsAttr = this.getAttribute('stats');
+    const statsAttr = this.getAttribute("stats");
     if (statsAttr) {
       try {
         this._stats = JSON.parse(statsAttr);
       } catch (e) {
-        console.error('dnd-stat-grid: Invalid JSON in stats attribute', e);
+        console.error("dnd-stat-grid: Invalid JSON in stats attribute", e);
         this._stats = [];
       }
     }
@@ -257,7 +258,7 @@ class DndStatGrid extends HTMLElement {
           left: 50%;
           transform: translateX(-50%) scaleY(0);
           background-color: transparent;
-          background-image: var(--dnd-tooltip-image, url('../../images/parchemin-aide.png'));
+          background-image: var(--dnd-tooltip-image, url('../../assets/images/parchemin-aide.png'));
           background-size: 100% 100%;
           background-repeat: no-repeat;
           background-position: center;
@@ -349,17 +350,20 @@ class DndStatGrid extends HTMLElement {
       return '<div class="stat"><span class="stat-value">Aucune statistique</span></div>';
     }
 
-    return this._stats.map(stat => {
-      const hasTooltip = stat.tooltip;
-      const tooltipClass = hasTooltip ? 'tooltip' : '';
-      const tooltipAttr = hasTooltip ? `data-tooltip="${this._escapeHtml(stat.tooltip)}"` : '';
+    return this._stats
+      .map((stat) => {
+        const hasTooltip = stat.tooltip;
+        const tooltipClass = hasTooltip ? "tooltip" : "";
+        const tooltipAttr = hasTooltip
+          ? `data-tooltip="${this._escapeHtml(stat.tooltip)}"`
+          : "";
 
-      // Affichage: valeur (modificateur) si modifier présent
-      const displayValue = stat.modifier
-        ? `${stat.value} (${stat.modifier})`
-        : stat.value;
+        // Affichage: valeur (modificateur) si modifier présent
+        const displayValue = stat.modifier
+          ? `${stat.value} (${stat.modifier})`
+          : stat.value;
 
-      return `
+        return `
         <div class="stat">
           <span class="stat-label ${tooltipClass}" ${tooltipAttr}>
             ${this._escapeHtml(stat.label)}
@@ -367,7 +371,8 @@ class DndStatGrid extends HTMLElement {
           <span class="stat-value">${this._escapeHtml(displayValue)}</span>
         </div>
       `;
-    }).join('');
+      })
+      .join("");
   }
 
   /**
@@ -377,8 +382,8 @@ class DndStatGrid extends HTMLElement {
    * @returns {string} Texte échappé
    */
   _escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
+    if (!text) return "";
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
@@ -430,22 +435,46 @@ class DndStatGrid extends HTMLElement {
    */
   static createAbilityStats(data) {
     const abilities = [
-      { key: 'strength', label: 'STR', tooltip: 'Force physique - Influence les attaques en mêlée' },
-      { key: 'dexterity', label: 'DEX', tooltip: 'Agilité - Influence l\'Armure et l\'initiative' },
-      { key: 'constitution', label: 'CON', tooltip: 'Endurance - Influence les points de vie' },
-      { key: 'intelligence', label: 'INT', tooltip: 'Raisonnement - Influence la magie arcane' },
-      { key: 'wisdom', label: 'WIS', tooltip: 'Perception - Influence la magie divine' },
-      { key: 'charisma', label: 'CHA', tooltip: 'Force de personnalité - Influence les compétences sociales' }
+      {
+        key: "strength",
+        label: "STR",
+        tooltip: "Force physique - Influence les attaques en mêlée",
+      },
+      {
+        key: "dexterity",
+        label: "DEX",
+        tooltip: "Agilité - Influence l'Armure et l'initiative",
+      },
+      {
+        key: "constitution",
+        label: "CON",
+        tooltip: "Endurance - Influence les points de vie",
+      },
+      {
+        key: "intelligence",
+        label: "INT",
+        tooltip: "Raisonnement - Influence la magie arcane",
+      },
+      {
+        key: "wisdom",
+        label: "WIS",
+        tooltip: "Perception - Influence la magie divine",
+      },
+      {
+        key: "charisma",
+        label: "CHA",
+        tooltip: "Force de personnalité - Influence les compétences sociales",
+      },
     ];
 
-    return abilities.map(ability => ({
+    return abilities.map((ability) => ({
       label: ability.label,
       value: String(data[ability.key] || 10),
       modifier: DndStatGrid.calculateModifier(data[ability.key] || 10),
-      tooltip: ability.tooltip
+      tooltip: ability.tooltip,
     }));
   }
 }
 
 // Enregistrement du Custom Element
-customElements.define('dnd-stat-grid', DndStatGrid);
+customElements.define("dnd-stat-grid", DndStatGrid);
