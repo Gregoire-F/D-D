@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>D&D 5e - Répertoire de sorts</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="sort.css" />
 
-<head>
-  <meta charset="UTF-8">
-  <title>Grimoire de Sorts</title>
-  <link rel="stylesheet" href="../../style.css">
-</head>
+    <!-- WebComponents & Modules -->
+    <script src="../../components/dnd-markdown.js"></script>
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
+    <main class="container sort-container">
+      <h1>Répertoire de sorts D&D 5e</h1>
 
-<body>
-  <dnd-search title="Grimoire de Sorts" endpoint="spells"></dnd-search>
-  <script src="../../components/dnd-search.js"></script>
-  <script src="spells.js"></script>
-</body>
+      <!-- Recherche temps réel -->
+      <section class="search-section">
+        <dnd-search-bar
+          id="searchBar"
+          placeholder="Rechercher un sort..."
+          show-button="false"
+          realtime="true"
+          debounce="200"
+        ></dnd-search-bar>
+      </section>
 
+      <div class="content">
+        <!-- Liste des sorts -->
+        <section class="directory">
+          <ul id="spellList"></ul>
+        </section>
+
+        <!-- Détails du sort -->
+        <section id="spellResult" class="result-section">
+          <p>Sélectionne un sort pour voir les détails.</p>
+        </section>
+      </div>
+    </main>
+
+    <script src="spells.js"></script>
+  </body>
 </html>

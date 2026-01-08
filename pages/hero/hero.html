@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="../../style.css" />
     <title>Classes de Héros</title>
@@ -12,5 +11,32 @@
     <script src="../../components/dnd-search.js"></script>
     <script src="hero.js"></script>
 </body>
+    <title>Recherche de Héros (Classes)</title>
 
+    <!-- WebComponents & Modules -->
+    <script src="../../components/dnd-markdown.js"></script>
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recherche de Classes (Héros)</h1>
+
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez une classe (ex: Wizard, Barbarian)"
+        button-text="Rechercher"
+      ></dnd-search-bar>
+
+      <dnd-dropdown
+        id="heroDropdown"
+        placeholder="-- Choisissez une classe --"
+      ></dnd-dropdown>
+
+      <div id="heroResult" class="monster-result"></div>
+    </div>
+
+    <script src="hero.js"></script>
+  </body>
 </html>

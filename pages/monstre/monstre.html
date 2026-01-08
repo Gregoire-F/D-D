@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../../style.css" />
+    <title>Recherche de monstres</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../../style.css" />
-  <title>Recherche de Monstres</title>
-</head>
+    <!-- WebComponents & Modules -->
+    <script src="../../components/dnd-markdown.js"></script>
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recherche de monstres</h1>
 
-<body>
-  <dnd-search title="Bestiaire de Monstres" endpoint="monsters"></dnd-search>
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez un nom de monstre"
+        button-text="Rechercher"
+      ></dnd-search-bar>
 
-  <script src="../../components/dnd-search.js"></script>
-  <script src="monstre.js"></script>
-</body>
+      <dnd-dropdown
+        id="monsterDropdown"
+        placeholder="-- Choisissez un monstre --"
+      ></dnd-dropdown>
 
+      <div id="monsterResult" class="monster-result"></div>
+    </div>
+
+    <script src="monstre.js"></script>
+  </body>
 </html>
