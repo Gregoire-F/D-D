@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails - D&D Codex</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../accueil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Un peu de style spécifique pour centrer la fiche */
+        .fiche-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Style de la carte agrandie */
+        .monster-card {
+            background-color: #fdf1dc;
+            border: 4px solid #8b0000;
+            border-radius: 8px;
+            padding: 40px;
+            /* Plus d'espace que la petite carte */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-size: 1.1rem;
+            /* Texte un peu plus grand */
+        }
+
+        .monster-header h1 {
+            color: #8b0000;
+            border-bottom: 3px solid #8b0000;
+            margin-bottom: 20px;
+            font-family: 'Georgia', serif;
+        }
+    </style>
+</head>
+
+<body>
+    <dnd-navbar root="../.."></dnd-navbar>
+
+    <div class="container fiche-container">
+        <div id="fiche-content">
+            <p style="text-align: center;">Chargement des données...</p>
+        </div>
+    </div>
+
+    <script src="../../components/dnd-navbar.js"></script>
+    <script src="fiche.js"></script>
+</body>
+
+</html>
