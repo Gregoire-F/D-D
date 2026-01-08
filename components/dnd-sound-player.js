@@ -15,6 +15,25 @@ this.isOpen = false;
     this.currentTab = 'player'; // 'player' ou 'mixage'
     this.selectedSounds = new Set(); // Sons pré-sélectionnés pour le mixage
     this.mixagePlaying = false;
+
+    // Scénarios prédéfinis
+    this.scenarios = {
+      'Village Attaqué': {
+        sounds: ['assets/sound/combat/cri.mp3', 'assets/sound/combat/dragon-breathing-fire.mp3', 'assets/sound/ambiance/medieval_village_atmosphere.mp3'],
+        icon: '🐉',
+        description: 'Un dragon attaque un village'
+      },
+      'Exécution': {
+        sounds: ['assets/sound/combat/cri.mp3', 'assets/sound/combat/coup-epee.mp3'],
+        icon: '🗡️',
+        description: 'Une exécution'
+      },
+      'Échec Critique': {
+        sounds: ['assets/sound/autre/echec.mp3', 'assets/sound/combat/cri.mp3'],
+        icon: '☠️',
+        description: 'Un échec avec des conséquences'
+      }
+    };
   }
 
   /**
@@ -185,6 +204,27 @@ this.isOpen = false;
     });
     this.mixagePlaying = false;
     this.updateMixageButtons();
+  }
+
+  /**
+   * Lance un scénario prédéfini
+   */
+  launchScenario(scenarioName) {
+    const scenario = this.scenarios[scenarioName];
+    if (!scenario) return;
+
+    // Arrêter les sons en cours
+    this.stopAllSounds();
+
+    // Sélectionner automatiquement les sons du scénario
+    this.selectedSounds.clear();
+    scenario.sounds.forEach(soundFile => {
+      this.selectedSounds.add(soundFile);
+    });
+
+    // Lancer automatiquement le mixage
+    this.mixagePlaying = false;
+    this.playMixage();
   }
 
   /**
@@ -459,6 +499,68 @@ this.isOpen = false;
           background: #c82333;
         }
 
+        /* Scénarios prédéfinis */
+        .scenarios-section {
+          margin-bottom: 1.5rem;
+          padding-bottom: 1rem;
+          border-bottom: 2px solid #e9ecef;
+        }
+
+        .scenarios-title {
+          font-weight: bold;
+          color: #2c5aa0;
+          margin-bottom: 0.8rem;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .scenarios-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          gap: 0.5rem;
+        }
+
+        .scenario-btn {
+          padding: 0.8rem;
+          background: linear-gradient(135deg, #8b4513, #654321);
+          border: 2px solid #4a2c17;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #f4e4c1;
+          transition: all 0.2s;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.3rem;
+          text-align: center;
+          box-shadow: 0 3px 10px rgba(139, 69, 19, 0.4);
+          font-family: 'Georgia', serif;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .scenario-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(139, 69, 19, 0.6);
+          background: linear-gradient(135deg, #a0522d, #704214);
+          border-color: #5d3a1a;
+        }
+
+        .scenario-btn:active {
+          transform: translateY(0);
+        }
+
+        .scenario-icon {
+          font-size: 1.5rem;
+        }
+
+        .scenario-name {
+          font-size: 0.8rem;
+          line-height: 1.2;
+        }
+
         h3 {
           margin: 0 0 1rem 0;
           color: #1d3557;
@@ -604,6 +706,10 @@ this.isOpen = false;
             font-size: 0.9rem;
           }
 
+          .scenarios-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
           .tabs {
             gap: 0.3rem;
           }
@@ -682,8 +788,27 @@ this.isOpen = false;
 
         <!-- Onglet Mixage -->
         <div class="tab-content ${this.currentTab === 'mixage' ? 'active' : ''}" id="mixage-tab">
+          <!-- Scénarios prédéfinis -->
+          <div class="scenarios-section">
+            <div class="scenarios-title">🎬 Scénarios Rapides</div>
+            <div class="scenarios-grid">
+              ${Object.entries(this.scenarios)
+                .map(
+                  ([name, scenario]) => `
+                <button class="scenario-btn" 
+                        onclick="this.getRootNode().host.launchScenario('${name}')">
+                  <span class="scenario-icon">${scenario.icon}</span>
+                  <span class="scenario-name">${name}</span>
+                </button>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+
+          <!-- Sélection manuelle -->
           <div style="margin-bottom: 1rem; font-size: 0.85rem; color: #6c757d;">
-            Sélectionnez plusieurs sons et jouez-les simultanément
+            Ou sélectionnez manuellement plusieurs sons et jouez-les simultanément
           </div>
           
           ${Object.entries(groupedSounds)
