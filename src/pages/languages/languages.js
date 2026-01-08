@@ -77,21 +77,22 @@ async function searchLanguage(languageName) {
 
     // Construction de la fiche de langue
     languagesResult.innerHTML = `
-      <div class="language-card">
+      <div class="monster-card">
         <!-- En-tête avec nom -->
-        <div class="language-header">
+        <div class="monster-header">
           <h2>${languageData.name}</h2>
+          <p><em>Langue</em></p>
         </div>
 
         <!-- Informations principales -->
-        <div class="language-details">
-          <p><strong>Type:</strong> ${languageData.type || "Non spécifié"}</p>
-          <p><strong>Script:</strong> ${languageData.script || "Aucun"}</p>
-          <p><strong>Locuteurs typiques:</strong> ${languageData.typical_speakers?.join(", ") || "Non spécifié"}</p>
+        <div class="monster-details">
+          <p><strong class="tooltip" data-tooltip="Type : Type de langue (ex: standard, exotique).">Type:</strong> ${languageData.type || "Non spécifié"}</p>
+          <p><strong class="tooltip" data-tooltip="Script : Système d'écriture associé.">Script:</strong> ${languageData.script || "Aucun"}</p>
+          <p><strong class="tooltip" data-tooltip="Locuteurs typiques : Peuples ou créatures qui parlent cette langue.">Locuteurs typiques:</strong> ${languageData.typical_speakers?.join(", ") || "Non spécifié"}</p>
         </div>
 
         <!-- Description -->
-        <div class="language-description">
+        <div class="monster-actions">
           <h3>Description</h3>
           <p>${languageData.desc || "Aucune description disponible."}</p>
         </div>
