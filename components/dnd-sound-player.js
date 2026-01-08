@@ -8,10 +8,13 @@ class DndSoundPlayer extends HTMLElement {
     // Initialise le Shadow DOM pour isoler les styles
     this.attachShadow({ mode: "open" });
     // État interne du composant
-    this.isOpen = false;
+this.isOpen = false;
     this.sounds = [];
     this.currentlyPlaying = null;
     this.audioElements = {};
+    this.currentTab = 'player'; // 'player' ou 'mixage'
+    this.selectedSounds = new Set(); // Sons pré-sélectionnés pour le mixage
+    this.mixagePlaying = false;
   }
 
   /**
@@ -49,11 +52,17 @@ class DndSoundPlayer extends HTMLElement {
         category: "Combat",
         icon: "⚔️",
       },
-      {
+{
         name: "Souffle de Dragon",
         file: "assets/sound/combat/dragon-breathing-fire.mp3",
         category: "Combat",
         icon: "🔥",
+      },
+      {
+        name: "Cri",
+        file: "assets/sound/combat/cri.mp3",
+        category: "Combat",
+        icon: "😱",
       },
 
       // Catégorie Autre
@@ -150,7 +159,7 @@ class DndSoundPlayer extends HTMLElement {
     }
   }
 
-  /**
+/**
    * Arrête tous les sons
    */
   stopAllSounds() {
@@ -160,6 +169,109 @@ class DndSoundPlayer extends HTMLElement {
     });
     this.currentlyPlaying = null;
     this.updatePlayingIndicator(null);
+    this.mixagePlaying = false;
+    this.updateMixageButtons();
+  }
+
+  /**
+   * Arrête uniquement les sons du mixage
+   */
+  stopMixage() {
+    this.selectedSounds.forEach(soundFile => {
+      if (this.audioElements[soundFile]) {
+        this.audioElements[soundFile].pause();
+        this.audioElements[soundFile].currentTime = 0;
+      }
+    });
+    this.mixagePlaying = false;
+    this.updateMixageButtons();
+  }
+
+  /**
+   * Bascule l'onglet actuel
+   */
+  switchTab(tab) {
+    this.currentTab = tab;
+    this.render();
+  }
+
+  /**
+   * Ajoute/retire un son de la sélection de mixage
+   */
+  toggleSoundSelection(soundFile) {
+    if (this.selectedSounds.has(soundFile)) {
+      this.selectedSounds.delete(soundFile);
+    } else {
+      this.selectedSounds.add(soundFile);
+    }
+    this.updateMixageButtons();
+  }
+
+  /**
+   * Joue tous les sons pré-sélectionnés en même temps
+   */
+  playMixage() {
+    if (this.selectedSounds.size === 0) {
+      alert('Veuillez sélectionner au moins un son pour le mixage');
+      return;
+    }
+
+    if (this.mixagePlaying) {
+      // Mettre en pause tous les sons du mixage (conserve la position)
+      this.selectedSounds.forEach(soundFile => {
+        if (this.audioElements[soundFile]) {
+          this.audioElements[soundFile].pause();
+        }
+      });
+      this.mixagePlaying = false;
+    } else {
+      // Reprendre la lecture depuis la position actuelle
+      this.selectedSounds.forEach(soundFile => {
+        if (!this.audioElements[soundFile]) {
+          this.audioElements[soundFile] = new Audio(soundFile);
+        }
+        
+        const audio = this.audioElements[soundFile];
+        // Ne remet pas currentTime à 0, continue depuis là où il était
+        audio.play().catch(error => {
+          console.error(`Erreur de lecture pour ${soundFile}:`, error);
+        });
+      });
+
+      this.mixagePlaying = true;
+    }
+
+    this.updateMixageButtons();
+  }
+
+  /**
+   * Met à jour l'état des boutons dans l'onglet mixage
+   */
+  updateMixageButtons() {
+    if (this.shadowRoot) {
+      // Mettre à jour les boutons de sélection
+      const selectButtons = this.shadowRoot.querySelectorAll('.select-sound-btn');
+      selectButtons.forEach(btn => {
+        const soundFile = btn.getAttribute('data-sound-file');
+        if (this.selectedSounds.has(soundFile)) {
+          btn.classList.add('selected');
+        } else {
+          btn.classList.remove('selected');
+        }
+      });
+
+      // Mettre à jour le bouton play mixage
+      const playMixageBtn = this.shadowRoot.getElementById('play-mixage-btn');
+      if (playMixageBtn) {
+        if (this.mixagePlaying) {
+          playMixageBtn.textContent = '⏸️ Pause Mixage';
+          playMixageBtn.style.background = '#ffc107';
+        } else {
+          playMixageBtn.textContent = '▶️ Jouer Mixage';
+          playMixageBtn.style.background = '#28a745';
+        }
+      }
+    }
   }
 
   /**
@@ -215,7 +327,7 @@ class DndSoundPlayer extends HTMLElement {
           box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Menu de mixage */
+/* Menu de mixage */
         .mixer {
           position: absolute;
           bottom: 70px;
@@ -230,6 +342,121 @@ class DndSoundPlayer extends HTMLElement {
           display: ${this.isOpen ? "block" : "none"};
           border: 1px solid rgba(255, 255, 255, 0.2);
           overflow-y: auto;
+        }
+
+        /* Onglets */
+        .tabs {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab {
+          padding: 0.5rem 1rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-weight: 500;
+          color: #6c757d;
+          transition: all 0.2s;
+          border-bottom: 2px solid transparent;
+          margin-bottom: -2px;
+        }
+
+        .tab.active {
+          color: #e63946;
+          border-bottom-color: #e63946;
+        }
+
+        .tab:hover {
+          color: #d62828;
+        }
+
+        /* Contenu des onglets */
+        .tab-content {
+          display: none;
+        }
+
+        .tab-content.active {
+          display: block;
+        }
+
+        /* Boutons de sélection pour le mixage */
+        .select-sound-btn {
+          padding: 0.6rem 0.8rem;
+          background: #f8f9fa;
+          border: 2px solid #dee2e6;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: #495057;
+          transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          text-align: left;
+          position: relative;
+        }
+
+        .select-sound-btn:hover {
+          background: #e9ecef;
+          border-color: #6c757d;
+        }
+
+        .select-sound-btn.selected {
+          background: #28a745;
+          color: white;
+          border-color: #218838;
+        }
+
+        .select-sound-btn.selected::after {
+          content: '✓';
+          position: absolute;
+          top: 0.2rem;
+          right: 0.3rem;
+          font-size: 0.7rem;
+        }
+
+        /* Bouton play mixage */
+        .play-mixage-btn {
+          width: 100%;
+          padding: 0.8rem;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: bold;
+          margin-top: 1rem;
+          transition: background 0.2s;
+        }
+
+        .play-mixage-btn:hover {
+          background: #218838;
+        }
+
+        .play-mixage-btn:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+        }
+
+        .stop-mixage-btn {
+          width: 100%;
+          padding: 0.8rem;
+          background: #dc3545;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-weight: bold;
+          margin-top: 0.5rem;
+          transition: background 0.2s;
+        }
+
+        .stop-mixage-btn:hover {
+          background: #c82333;
         }
 
         h3 {
@@ -372,9 +599,18 @@ class DndSoundPlayer extends HTMLElement {
             grid-template-columns: 1fr;
           }
 
-          .sound-btn {
+          .sound-btn, .select-sound-btn {
             padding: 0.8rem;
             font-size: 0.9rem;
+          }
+
+          .tabs {
+            gap: 0.3rem;
+          }
+
+          .tab {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
           }
         }
 
@@ -397,51 +633,109 @@ class DndSoundPlayer extends HTMLElement {
         🎵
       </button>
 
-      <!-- Panneau de mixage -->
+<!-- Panneau de mixage -->
       <div class="mixer fade-in">
         <h3>🎵 Table de Mixage D&D</h3>
         
-        ${Object.entries(groupedSounds)
-          .map(
-            ([category, sounds]) => `
-          <div class="category">
-            <div class="category-title">${category}</div>
-            <div class="sounds-grid">
-              ${sounds
-                .map(
-                  (sound) => `
-                <button class="sound-btn" 
-                        data-sound-file="${sound.file}"
-                        data-sound-name="${sound.name}">
-                  <span>${sound.icon}</span>
-                  <span>${sound.name}</span>
-                </button>
-              `
-                )
-                .join("")}
-            </div>
-          </div>
-        `
-          )
-          .join("")}
+        <!-- Onglets -->
+        <div class="tabs">
+          <button class="tab ${this.currentTab === 'player' ? 'active' : ''}" 
+                  onclick="this.getRootNode().host.switchTab('player')">
+            🎵 Lecteur
+          </button>
+          <button class="tab ${this.currentTab === 'mixage' ? 'active' : ''}" 
+                  onclick="this.getRootNode().host.switchTab('mixage')">
+            🎛️ Mixage
+          </button>
+        </div>
 
-        <button class="stop-all-btn" onclick="this.getRootNode().host.stopAllSounds()">
-          ⏹️ Arrêter tous les sons
-        </button>
+        <!-- Onglet Lecteur -->
+        <div class="tab-content ${this.currentTab === 'player' ? 'active' : ''}" id="player-tab">
+          ${Object.entries(groupedSounds)
+            .map(
+              ([category, sounds]) => `
+            <div class="category">
+              <div class="category-title">${category}</div>
+              <div class="sounds-grid">
+                ${sounds
+                  .map(
+                    (sound) => `
+                  <button class="sound-btn" 
+                          data-sound-file="${sound.file}"
+                          data-sound-name="${sound.name}">
+                    <span>${sound.icon}</span>
+                    <span>${sound.name}</span>
+                  </button>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `
+            )
+            .join("")}
+
+          <button class="stop-all-btn" onclick="this.getRootNode().host.stopAllSounds()">
+            ⏹️ Arrêter tous les sons
+          </button>
+        </div>
+
+        <!-- Onglet Mixage -->
+        <div class="tab-content ${this.currentTab === 'mixage' ? 'active' : ''}" id="mixage-tab">
+          <div style="margin-bottom: 1rem; font-size: 0.85rem; color: #6c757d;">
+            Sélectionnez plusieurs sons et jouez-les simultanément
+          </div>
+          
+          ${Object.entries(groupedSounds)
+            .map(
+              ([category, sounds]) => `
+            <div class="category">
+              <div class="category-title">${category}</div>
+              <div class="sounds-grid">
+                ${sounds
+                  .map(
+                    (sound) => `
+                  <button class="select-sound-btn ${this.selectedSounds.has(sound.file) ? 'selected' : ''}" 
+                          data-sound-file="${sound.file}"
+                          onclick="this.getRootNode().host.toggleSoundSelection('${sound.file}')">
+                    <span>${sound.icon}</span>
+                    <span>${sound.name}</span>
+                  </button>
+                `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `
+            )
+            .join("")}
+
+          <button class="play-mixage-btn" id="play-mixage-btn" 
+                  onclick="this.getRootNode().host.playMixage()">
+            ${this.mixagePlaying ? '⏸️ Pause Mixage' : '▶️ Jouer Mixage'}
+          </button>
+
+          <button class="stop-mixage-btn" onclick="this.getRootNode().host.stopMixage()">
+            ⏹️ Arrêter Mixage
+          </button>
+        </div>
       </div>
     `;
 
-    // Attache les événements après le rendu
+// Attache les événements après le rendu
     this.shadowRoot.getElementById("toggle-btn").onclick = () =>
       this.toggleMenu();
 
-    // Attache les événements pour tous les boutons de sons
+    // Attache les événements pour tous les boutons de sons (onglet lecteur)
     const soundButtons = this.shadowRoot.querySelectorAll(".sound-btn");
     soundButtons.forEach((btn) => {
       const soundFile = btn.getAttribute("data-sound-file");
       const soundName = btn.getAttribute("data-sound-name");
       btn.onclick = () => this.playSound(soundFile, soundName);
     });
+
+    // Mettre à jour l'état des boutons de mixage
+    this.updateMixageButtons();
   }
 }
 
