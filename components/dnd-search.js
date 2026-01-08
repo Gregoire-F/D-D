@@ -48,7 +48,7 @@ class DndSearch extends HTMLElement {
         this.fetchDetails(e.target.value);
       }
     });
-    this.sortSelect.addEventListener("change", () => {
+    this.sortSelect.addEventListener("change", () => {  //si la valeur change, on l'enregistre
       this.loadList();
     });
   }
@@ -60,7 +60,7 @@ class DndSearch extends HTMLElement {
       );
       const data = await response.json();
       const sortMode = this.sortSelect.value;
-      const sortedResults = this.sortResults(data.results, sortMode);
+      const sortedResults = this.sortResults(data.results, sortMode); // pour stocker la version triée de la liste
       this.select.innerHTML =
         '<option value="">-- Choisissez dans la liste --</option>';
       sortedResults.forEach((item) => {
