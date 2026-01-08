@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recherche de Traits Raciaux</title>
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- WebComponents & Modules -->
+    <script src="../../components/dnd-markdown.js"></script>
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recherche de Traits Raciaux</h1>
+
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez un trait racial (ex: Vision dans le noir...)"
+        button-text="Rechercher"
+      ></dnd-search-bar>
+
+      <dnd-dropdown
+        id="racialTraitsDropdown"
+        placeholder="-- Choisissez un trait racial --"
+      ></dnd-dropdown>
+
+      <div id="racialTraitsResult" class="monster-result"></div>
+    </div>
+
+    <script src="racial-traits.js"></script>
+  </body>
+</html>

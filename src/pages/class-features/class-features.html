@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recherche d'Aptitudes de Classe</title>
+    <link rel="stylesheet" href="../../style.css" />
+
+    <!-- WebComponents & Modules -->
+    <script src="../../components/dnd-markdown.js"></script>
+    <script src="../../components/dnd-search-bar.js"></script>
+    <script src="../../components/dnd-dropdown.js"></script>
+    <script src="../../components/dnd-stat-grid.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Recherche d'Aptitudes de Classe</h1>
+
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez une aptitude (ex: Rage, Attaque sournoise...)"
+        button-text="Rechercher"
+      ></dnd-search-bar>
+
+      <dnd-dropdown
+        id="classFeaturesDropdown"
+        placeholder="-- Choisissez une aptitude --"
+      ></dnd-dropdown>
+
+      <div id="classFeaturesResult" class="monster-result"></div>
+    </div>
+
+    <script src="class-features.js"></script>
+  </body>
+</html>
