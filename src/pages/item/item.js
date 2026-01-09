@@ -105,7 +105,7 @@ function renderCard(item) {
   // Construction du nom de fichier : "Dagger" -> "dagger.webp"
   const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
   // Chemin vers le dossier images depuis pages/item/
-  const imagePath = `../../assets/images/pictures_webp/equipment/${imageName}`;
+  const imagePath = `../../assets/images/equipment/${imageName}`;
 
   // Logique pour la 3ème stat
   let stat3Label = "Info";
