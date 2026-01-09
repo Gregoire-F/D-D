@@ -1,184 +1,194 @@
-const BASE_URL = "https://www.dnd5eapi.co";
-
 // ========================================
 // DÉCLARATION DES VARIABLES DOM
 // ========================================
 const searchBar = document.getElementById("searchBar");
 const itemDropdown = document.getElementById("itemDropdown");
-const resultArea = document.getElementById("resultArea");
+const itemResult = document.getElementById("itemResult");
 
-// Cache des items
-let globalItems = [];
+// Cache des items pour éviter les requêtes multiples
+let allItems = [];
 
 // ========================================
-// CHARGEMENT INITIAL
+// CHARGEMENT INITIAL DE LA PAGE
 // ========================================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const [eqRes, magicRes] = await Promise.all([
-      fetch(`${BASE_URL}/api/equipment`),
-      fetch(`${BASE_URL}/api/magic-items`),
+      fetch("https://www.dnd5eapi.co/api/2014/equipment"),
+      fetch("https://www.dnd5eapi.co/api/2014/magic-items"),
     ]);
     const eqData = await eqRes.json();
     const magicData = await magicRes.json();
 
-    // Fusion des listes
-    globalItems = [...eqData.results, ...magicData.results];
-    console.log("Inventaire chargé : " + globalItems.length);
+    // Fusion et tri alphabétique des items
+    allItems = [...eqData.results, ...magicData.results].sort((a, b) => 
+      a.name.localeCompare(b.name)
+    );
+
+    // Peupler le dropdown avec les WebComponents
+    const options = allItems.map((item) => ({
+      value: item.name.toLowerCase(),
+      label: item.name,
+    }));
+    itemDropdown.setOptions(options);
   } catch (error) {
-    console.error("Erreur API", error);
-    resultArea.innerHTML = "<p>Erreur de connexion à l'API.</p>";
+    console.error("Erreur lors du chargement du menu :", error);
   }
 });
 
 // ========================================
 // GESTION DES ÉVÉNEMENTS (WebComponents)
 // ========================================
+// Événement de recherche depuis la barre de recherche
 searchBar.addEventListener("dnd-search", (e) => {
-  const query = e.detail.query;
+  const query = e.detail.query.toLowerCase();
   if (query) {
-    performSearch(query);
+    searchItem(query);
+  } else {
+    itemResult.innerHTML = "Veuillez entrer un nom d'item.";
   }
 });
 
+// Événement de sélection depuis le dropdown
 itemDropdown.addEventListener("dnd-select", (e) => {
-  const { value } = e.detail;
+  const { value, label } = e.detail;
   if (value) {
-    fetchAndRenderItem(value);
+    searchBar.value = label;
+    searchItem(value);
   }
 });
 
 // ========================================
-// LOGIQUE DE RECHERCHE
+// FONCTIONS DE FORMATTAGE DES DONNÉES
 // ========================================
-function performSearch(query) {
-  const lowerQuery = query.toLowerCase().trim();
-  if (!lowerQuery) return;
-
-  // Filtrer
-  const matches = globalItems.filter((item) =>
-    item.name.toLowerCase().includes(lowerQuery)
-  );
-
-  // Reset UI
-  resultArea.innerHTML = "";
-  itemDropdown.clear();
-
-  if (matches.length === 0) {
-    resultArea.innerHTML = "<p>Aucun item trouvé.</p>";
-    itemDropdown.hide();
-  } else if (matches.length === 1) {
-    // Un seul résultat : on affiche direct
-    itemDropdown.hide();
-    fetchAndRenderItem(matches[0].url);
-  } else {
-    // Plusieurs résultats : on remplit le dropdown
-    const options = matches.map((item) => ({
-      value: item.url,
-      label: item.name,
-    }));
-    itemDropdown.setOptions(options);
-    itemDropdown.show();
-  }
+function formatCost(cost) {
+  if (!cost) return "N/A";
+  return `${cost.quantity} ${cost.unit}`;
 }
 
-// ========================================
-// FETCH ET AFFICHAGE
-// ========================================
-async function fetchAndRenderItem(urlSuffix) {
-  resultArea.innerHTML = "<p>Chargement des détails...</p>";
-  try {
-    const res = await fetch(BASE_URL + urlSuffix);
-    const data = await res.json();
-    renderCard(data);
-  } catch (e) {
-    resultArea.innerHTML = "<p>Erreur lors du chargement de l'item.</p>";
-  }
+function formatWeight(weight) {
+  if (!weight) return "N/A";
+  return `${weight} lb`;
 }
 
-function renderCard(item) {
-  const type = item.equipment_category ? item.equipment_category.name : "Objet";
-  const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
-  const weight = item.weight ? `${item.weight} lb` : "-";
+function formatProperties(properties) {
+  if (!properties || properties.length === 0) return "Aucune";
+  return properties.map(p => p.name).join(", ");
+}
 
-  // Logique pour la 3ème stat
-  let stat3Label = "Info";
-  let stat3Value = "-";
-  let stat3Tooltip = "";
-
+function getItemThirdStat(item) {
   if (item.armor_class) {
-    stat3Label = "AC";
-    stat3Value =
-      item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : "");
-    stat3Tooltip = "Classe d'armure - Protection fournie";
+    return {
+      label: "AC",
+      value: item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : ""),
+      tooltip: "Classe d'armure - Protection fournie"
+    };
   } else if (item.damage) {
-    stat3Label = "Dégâts";
-    stat3Value = `${item.damage.damage_dice} ${item.damage.damage_type.name}`;
-    stat3Tooltip = "Dégâts infligés par l'arme";
+    return {
+      label: "Dégâts", 
+      value: `${item.damage.damage_dice} ${item.damage.damage_type.name}`,
+      tooltip: "Dégâts infligés par l'arme"
+    };
   } else if (item.rarity) {
-    stat3Label = "Rareté";
-    stat3Value = item.rarity.name;
-    stat3Tooltip = "Niveau de rareté de l'objet magique";
+    return {
+      label: "Rareté",
+      value: item.rarity.name,
+      tooltip: "Niveau de rareté de l'objet magique"
+    };
   }
+  return {
+    label: "Info",
+    value: "-",
+    tooltip: "Information supplémentaire"
+  };
+}
 
-  let html = `
-    <div class="monster-card">
-      <div class="monster-header">
-        <h2>${item.name}</h2>
-        <p>${type}</p>
+// ========================================
+// FONCTION PRINCIPALE DE RECHERCHE
+// ========================================
+async function searchItem(itemName) {
+  itemResult.innerHTML = "Recherche en cours...";
+
+  try {
+    // Recherche de l'item dans le cache
+    const matchedItem = allItems.find(
+      (item) => item.name.toLowerCase() === itemName
+    );
+
+    if (!matchedItem) {
+      itemResult.innerHTML = "Item non trouvé.";
+      return;
+    }
+
+    // Récupérer les détails complets de l'item
+    const response = await fetch(
+      `https://www.dnd5eapi.co${matchedItem.url}`
+    );
+    const itemData = await response.json();
+
+    const type = itemData.equipment_category ? itemData.equipment_category.name : "Objet";
+    const thirdStat = getItemThirdStat(itemData);
+
+    // Construction de la fiche d'item
+    itemResult.innerHTML = `
+      <div class="monster-card">
+        <!-- En-tête avec nom et caractéristiques de base -->
+        <div class="monster-header">
+          <h2>${itemData.name}</h2>
+          <p><em>${type}</em></p>
+        </div>
+
+        <!-- Statistiques principales -->
+        <div class="monster-stats-top">
+          <p><strong class="tooltip" data-tooltip="Catégorie de l'objet.">Catégorie:</strong> ${type}</p>
+          <p><strong class="tooltip" data-tooltip="Poids de l'objet.">Poids:</strong> ${formatWeight(itemData.weight)}</p>
+          <p><strong class="tooltip" data-tooltip="${thirdStat.tooltip}">${thirdStat.label}:</strong> ${thirdStat.value}</p>
+        </div>
+
+        <!-- Caractéristiques avec WebComponent -->
+        <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
+
+        <!-- Informations de jeu -->
+        <div class="monster-details">
+          <p><strong class="tooltip" data-tooltip="Prix de l'objet.">Coût:</strong> ${formatCost(itemData.cost)}</p>
+          <p><strong>Propriétés:</strong> ${formatProperties(itemData.properties)}</p>
+        </div>
+
+        <!-- Description et capacités spéciales -->
+        <div class="monster-actions">
+          <h3>Description</h3>
+          <ul>
+            ${
+              itemData.desc && itemData.desc.length > 0
+                ? itemData.desc.map(line => `<li>${DndMarkdown.parse(line)}</li>`).join("")
+                : `<li>Pas de description détaillée disponible.</li>`
+            }
+          </ul>
+        </div>
       </div>
+    `;
 
-      <div class="monster-stats-top">
-        <p><strong>Catégorie :</strong> ${type}</p>
-      </div>
-
-      <!-- Stats de l'item (WebComponent) -->
-      <dnd-stat-grid id="itemStats"></dnd-stat-grid>
-
-      <div class="monster-actions">
-        <h3>Description & Propriétés</h3>
-        <ul>`;
-
-  if (item.desc && item.desc.length > 0) {
-    item.desc.forEach((line) => {
-      html += `<li>${DndMarkdown.parse(line)}</li>`;
-    });
-  } else {
-    html += `<li>Pas de description détaillée disponible.</li>`;
+    // Peupler le composant stat-grid avec les stats de l'item
+    const statGrid = itemResult.querySelector("#monsterStats");
+    statGrid.stats = [
+      {
+        label: "Coût",
+        value: formatCost(itemData.cost),
+        tooltip: "Prix de l'objet en pièces",
+      },
+      {
+        label: "Poids",
+        value: formatWeight(itemData.weight),
+        tooltip: "Poids de l'objet en livres",
+      },
+      {
+        label: thirdStat.label,
+        value: thirdStat.value,
+        tooltip: thirdStat.tooltip,
+      },
+    ];
+  } catch (error) {
+    console.error(error);
+    itemResult.innerHTML = "Erreur lors de la recherche.";
   }
-
-  if (item.properties && item.properties.length > 0) {
-    html += `<li><strong>Propriétés: </strong>`;
-    html += item.properties
-      .map(
-        (p) =>
-          `<span class="tooltip" data-tooltip="Propriété de l'arme">${p.name}</span>`
-      )
-      .join(", ");
-    html += `</li>`;
-  }
-
-  html += `</ul></div></div>`;
-
-  resultArea.innerHTML = html;
-
-  // Peupler le composant stat-grid avec les stats de l'item
-  const statGrid = resultArea.querySelector("#itemStats");
-  statGrid.stats = [
-    {
-      label: "Coût",
-      value: cost,
-      tooltip: "Prix de l'objet en pièces",
-    },
-    {
-      label: "Poids",
-      value: weight,
-      tooltip: "Poids de l'objet en livres",
-    },
-    {
-      label: stat3Label,
-      value: stat3Value,
-      tooltip: stat3Tooltip || "Information supplémentaire",
-    },
-  ];
 }
