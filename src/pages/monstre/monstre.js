@@ -104,6 +104,12 @@ async function searchMonster(monsterName) {
 
     // Construction de la fiche de monstre
     monsterResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${monsterData.index}"
+        name="${monsterData.name}"
+        url="${monsterData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
         <div class="entity-header">
@@ -112,6 +118,8 @@ async function searchMonster(monsterName) {
       monsterData.alignment
     }</em></p>
         </div>
+
+        
 
         <!-- Image du monstre si disponible -->
         ${

@@ -106,10 +106,18 @@ async function searchRule(indexOrName) {
     const ruleData = await response.json();
 
     rulesResult.innerHTML = ` 
+    <favorite-toggle
+        entity="background"
+        index="${ruleData.index}"
+        name="${ruleData.name}"
+        url="${ruleData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <div class="entity-header">
           <h2>${ruleData.name}</h2>
         </div>
+
+        
 
         <div class="entity-details">
           ${DndMarkdown.parse(ruleData.desc)}

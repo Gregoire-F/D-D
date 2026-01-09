@@ -79,6 +79,12 @@ async function searchBackground(backgroundName) {
 
     // Construction de la fiche de background
     backgroundResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${backgroundData.index}"
+        name="${backgroundData.name}"
+        url="${backgroundData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom -->
         <div class="entity-header">
@@ -86,12 +92,7 @@ async function searchBackground(backgroundName) {
           <p><em>Background</em></p>
         </div>
         
-        <favorite-toggle
-        entity="background"
-        index="${backgroundData.index}"
-        name="${backgroundData.name}"
-        url="${backgroundData.url}">
-      </favorite-toggle>
+        
 
         <!-- Informations principales -->
         <div class="entity-details">

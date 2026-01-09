@@ -15,7 +15,7 @@ class FavoriteToggle extends HTMLElement {
   }
 
   get storageKey() {
-    return "dnd-favorites";
+    return "favorites";
   }
 
   get data() {

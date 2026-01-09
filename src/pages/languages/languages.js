@@ -77,12 +77,20 @@ async function searchLanguage(languageName) {
 
     // Construction de la fiche de langue
     languagesResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${languageData.index}"
+        name="${languageData.name}"
+        url="${languageData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom -->
         <div class="entity-header">
           <h2>${languageData.name}</h2>
           <p><em>Langue</em></p>
         </div>
+
+        
 
         <!-- Informations principales -->
         <div class="entity-details">
