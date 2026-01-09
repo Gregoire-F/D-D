@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const container = document.getElementById("fiche-content");
 
-    // Récupération des paramètres
+    // Récupération des paramètres de l'URL
     const params = new URLSearchParams(window.location.search);
     const apiUrl = params.get('url');
     const typeLabel = params.get('type') || "Détail";
@@ -18,11 +18,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!response.ok) throw new Error("Données introuvables");
         const data = await response.json();
 
-        // Affichage selon le type
+        // --- AIGUILLAGE ---
         if (apiUrl.includes("monsters")) renderMonster(data);
         else if (apiUrl.includes("spells")) renderSpell(data);
         else if (apiUrl.includes("classes")) renderClass(data);
         else if (apiUrl.includes("races")) renderRace(data);
+        else if (apiUrl.includes("equipment")) renderEquipment(data, typeLabel);
         else if (apiUrl.includes("rules") || apiUrl.includes("rule-sections")) renderRule(data, typeLabel);
         else renderGeneric(data, typeLabel);
 
@@ -31,7 +32,53 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = `<div class="monster-card"><h2>Erreur</h2><p>Impossible de charger les données.</p></div>`;
     }
 
-    // --- TEMPLATES ---
+    // --- FONCTIONS D'AFFICHAGE ---
+
+    function renderEquipment(data, type) {
+        // 1. Nettoyage du nom pour correspondre au fichier
+        // Ex: "Dagger" -> "dagger.webp"
+        // Ex: "Alchemist's Fire (flask)" -> "alchemist's_fire_(flask).webp"
+        const imageName = data.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+
+        // 2. CHEMIN CORRIGÉ (pictures_webp avec un 's')
+        const imagePath = `../../assets/images/pictures_webp/equipment/${imageName}`;
+
+        let desc = "";
+        if (data.desc) desc = Array.isArray(data.desc) ? data.desc.join("<br><br>") : data.desc;
+
+        // Bloc image propre
+        const imageHtml = `
+            <div style="text-align:center; margin-bottom: 20px;">
+                <img src="${imagePath}" 
+                     alt="${data.name}"
+                     style="max-width:250px; max-height:250px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" 
+                     onerror="this.style.display='none';"> 
+            </div>`;
+
+        container.innerHTML = `
+        <div class="monster-card">
+            <div class="monster-header">
+                <h1>${data.name}</h1>
+                <p><em>${type} ${data.equipment_category ? "- " + data.equipment_category.name : ""}</em></p>
+            </div>
+            
+            ${imageHtml}
+
+            <div class="monster-content">
+                <div style="display:flex; justify-content:space-around; flex-wrap:wrap; gap:10px; background:#eee; padding:15px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; text-align:center;">
+                    ${data.cost ? `<div><strong>Coût</strong><br>${data.cost.quantity} ${data.cost.unit}</div>` : ""}
+                    ${data.weight ? `<div><strong>Poids</strong><br>${data.weight} lb</div>` : ""}
+                    ${data.damage ? `<div><strong>Dégâts</strong><br>${data.damage.damage_dice} ${data.damage.damage_type.name}</div>` : ""}
+                    ${data.armor_class ? `<div><strong>CA</strong><br>${data.armor_class.base}${data.armor_class.dex_bonus ? " + Dex" : ""}</div>` : ""}
+                    ${data.range ? `<div><strong>Portée</strong><br>${data.range.normal}/${data.range.long} ft</div>` : ""}
+                </div>
+
+                ${data.properties && data.properties.length > 0 ? `<p><strong>Propriétés :</strong> ${data.properties.map(p => p.name).join(", ")}</p>` : ""}
+                
+                ${desc ? `<hr><div style="margin-top:15px;">${desc}</div>` : ""}
+            </div>
+        </div>`;
+    }
 
     function renderMonster(data) {
         const image = data.image ? `https://www.dnd5eapi.co${data.image}` : "";
