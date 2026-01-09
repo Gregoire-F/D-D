@@ -1,177 +1,147 @@
-/**
- * @fileoverview Gestion de la recherche et de l'affichage des traits raciaux via l'API D&D 5e.
- * @author Projet SKOLAE D&D
- */
-
 // ========================================
 // DÉCLARATION DES VARIABLES DOM
 // ========================================
-// Récupération des éléments du DOM par leur ID
 const searchBar = document.getElementById("searchBar");
 const racialTraitsDropdown = document.getElementById("racialTraitsDropdown");
 const racialTraitsResult = document.getElementById("racialTraitsResult");
 
-/** URL de base de l'API pour les traits raciaux */
-const API_URL = "https://www.dnd5eapi.co/api/traits";
-
-/** Cache local pour stocker la liste complète des traits raciaux (pour le filtrage) */
+// Cache des traits raciaux pour éviter les requêtes multiples
 let allRacialTraits = [];
 
 // ========================================
-// CHARGEMENT INITIAL
+// CHARGEMENT INITIAL DE LA PAGE
 // ========================================
-/** Déclenche le chargement initial au chargement de la page */
 window.addEventListener("DOMContentLoaded", async () => {
-  await loadRacialTraits();
-  setupEventListeners();
-});
-
-/**
- * Charge la liste de tous les traits raciaux depuis l'API.
- * Remplit le dropdown avec les données récupérées.
- */
-async function loadRacialTraits() {
   try {
-    const response = await fetch(API_URL);
+    const response = await fetch("https://www.dnd5eapi.co/api/2014/traits");
     const data = await response.json();
 
-    // Transformation des données pour le format attendu par dnd-dropdown {value, label}
-    allRacialTraits = data.results.map((trait) => ({
-      value: trait.index,
+    // Tri alphabétique des traits raciaux par nom
+    allRacialTraits = data.results.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Peupler le dropdown avec les WebComponents
+    const options = allRacialTraits.map((trait) => ({
+      value: trait.name.toLowerCase(),
       label: trait.name,
     }));
-
-    // Tri par ordre alphabétique pour une meilleure expérience utilisateur
-    allRacialTraits.sort((a, b) => a.label.localeCompare(b.label));
-
-    // Mise à jour du composant dropdown
-    if (racialTraitsDropdown) {
-      racialTraitsDropdown.setOptions(allRacialTraits);
-    }
+    racialTraitsDropdown.setOptions(options);
   } catch (error) {
-    console.error("Erreur lors du chargement des traits raciaux :", error);
-    if (racialTraitsResult) {
-      // Affichage d'un message d'erreur dans l'UI
-      racialTraitsResult.innerHTML = `<p class="error">Impossible de charger les traits raciaux.</p>`;
-    }
+    console.error("Erreur lors du chargement du menu :", error);
   }
+});
+
+// ========================================
+// GESTION DES ÉVÉNEMENTS (WebComponents)
+// ========================================
+// Événement de recherche depuis la barre de recherche
+searchBar.addEventListener("dnd-search", (e) => {
+  const query = e.detail.query.toLowerCase();
+  if (query) {
+    searchRacialTrait(query);
+  } else {
+    racialTraitsResult.innerHTML = "Veuillez entrer un nom de trait racial.";
+  }
+});
+
+// Événement de sélection depuis le dropdown
+racialTraitsDropdown.addEventListener("dnd-select", (e) => {
+  const { value, label } = e.detail;
+  if (value) {
+    searchBar.value = label;
+    searchRacialTrait(value);
+  }
+});
+
+// ========================================
+// FONCTIONS DE FORMATTAGE DES DONNÉES
+// ========================================
+function formatRaces(races) {
+  if (!races || races.length === 0) return "Aucune";
+  return races.map(r => r.name).join(", ");
 }
 
-/**
- * Configure les écouteurs d'événements pour les composants interactifs.
- */
-function setupEventListeners() {
-  if (!racialTraitsDropdown || !searchBar) return;
-
-  /** Écoute de l'événement de sélection personnalisé du dnd-dropdown */
-  racialTraitsDropdown.addEventListener("dnd-select", (e) => {
-    const traitIndex = e.detail.value;
-    if (traitIndex) {
-      // Si un trait est sélectionné, on récupère ses détails
-      fetchTraitDetails(traitIndex);
-    } else {
-      // Si la sélection est vidée, on efface le résultat
-      racialTraitsResult.innerHTML = "";
-    }
-  });
-
-  /** Écoute de l'événement de recherche personnalisé du dnd-search-bar */
-  searchBar.addEventListener("dnd-search", (e) => {
-    const query = e.detail.query.toLowerCase().trim();
-    // Filtre la liste visible dans le dropdown
-    filterTraits(query);
-  });
+function formatSubraces(subraces) {
+  if (!subraces || subraces.length === 0) return "Aucune";
+  return subraces.map(s => s.name).join(", ");
 }
 
-/**
- * Filtre les options du dropdown selon la saisie de l'utilisateur.
- * @param {string} query - Le terme de recherche
- */
-function filterTraits(query) {
-  if (!query) {
-    // Si la recherche est vide, on réaffiche tout
-    racialTraitsDropdown.setOptions(allRacialTraits);
-    return;
-  }
+// ========================================
+// FONCTION PRINCIPALE DE RECHERCHE
+// ========================================
+async function searchRacialTrait(traitName) {
+  racialTraitsResult.innerHTML = "Recherche en cours...";
 
-  // Filtrage basé sur le nom du trait
-  const filtered = allRacialTraits.filter((trait) =>
-    trait.label.toLowerCase().includes(query)
-  );
-
-  racialTraitsDropdown.setOptions(filtered);
-
-  if (filtered.length === 0) {
-    console.log("Aucun trait trouvé pour :", query);
-  }
-}
-
-/**
- * Récupère les détails d'un trait spécifique via son index API.
- * @param {string} index - L'index unique du trait (ex: 'darkvision')
- */
-async function fetchTraitDetails(index) {
   try {
-    if (racialTraitsResult) {
-      racialTraitsResult.innerHTML = "<p>Chargement des détails...</p>";
+    // Recherche du trait racial dans le cache
+    const matchedTrait = allRacialTraits.find(
+      (trait) => trait.name.toLowerCase() === traitName
+    );
+
+    if (!matchedTrait) {
+      racialTraitsResult.innerHTML = "Trait racial non trouvé.";
+      return;
     }
 
-    const response = await fetch(`${API_URL}/${index}`);
-    const trait = await response.json();
+    // Récupérer les détails complets du trait racial
+    const response = await fetch(
+      `https://www.dnd5eapi.co${matchedTrait.url}`
+    );
+    const traitData = await response.json();
 
-    // Affichage des données formatées
-    displayTrait(trait);
+    // Construction de la fiche de trait racial
+    racialTraitsResult.innerHTML = `
+      <div class="monster-card">
+        <!-- En-tête avec nom et caractéristiques de base -->
+        <div class="monster-header">
+          <h2>${traitData.name}</h2>
+          <p><em>Trait racial</em></p>
+        </div>
+
+        <!-- Statistiques principales -->
+        <div class="monster-stats-top">
+          <p><strong class="tooltip" data-tooltip="Type de trait racial.">Type:</strong> Trait racial</p>
+          <p><strong class="tooltip" data-tooltip="Races concernées.">Races:</strong> ${formatRaces(traitData.races)}</p>
+          <p><strong class="tooltip" data-tooltip="Sous-races concernées.">Sous-races:</strong> ${formatSubraces(traitData.subraces)}</p>
+        </div>
+
+        <!-- Caractéristiques avec WebComponent -->
+        <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
+
+        <!-- Informations de jeu -->
+        <div class="monster-details">
+          <p><strong>Nombre de races:</strong> ${traitData.races?.length || 0}</p>
+          <p><strong>Nombre de sous-races:</strong> ${traitData.subraces?.length || 0}</p>
+        </div>
+
+        <!-- Description et capacités spéciales -->
+        <div class="monster-actions">
+          <h3>Description</h3>
+          <p>${traitData.desc ? DndMarkdown.parseArray(traitData.desc) : "Aucune description disponible."}</p>
+        </div>
+      </div>
+    `;
+
+    // Peupler le composant stat-grid avec les stats du trait
+    const statGrid = racialTraitsResult.querySelector("#monsterStats");
+    statGrid.stats = [
+      {
+        label: "Type",
+        value: "Trait racial",
+        tooltip: "Type de capacité",
+      },
+      {
+        label: "Races",
+        value: String(traitData.races?.length || 0),
+        tooltip: "Nombre de races concernées",
+      },
+      {
+        label: "Sous-races",
+        value: String(traitData.subraces?.length || 0),
+        tooltip: "Nombre de sous-races concernées",
+      },
+    ];
   } catch (error) {
-    console.error("Erreur lors de la récupération du trait :", error);
-    if (racialTraitsResult) {
-      racialTraitsResult.innerHTML = `<p class="error">Erreur lors du chargement des détails du trait.</p>`;
-    }
+    console.error(error);
+    racialTraitsResult.innerHTML = "Erreur lors de la recherche.";
   }
-}
-
-/**
- * Formate et affiche les détails du trait dans le conteneur de résultat.
- * @param {Object} trait - L'objet trait complet renvoyé par l'API
- */
-function displayTrait(trait) {
-  if (!racialTraitsResult) return;
-
-  // Préparation du HTML pour les races associées
-  let racesHtml = "";
-  if (trait.races && trait.races.length > 0) {
-    racesHtml = `
-      <div class="trait-races">
-        <strong>Races :</strong> ${trait.races.map((r) => r.name).join(", ")}
-      </div>
-    `;
-  }
-
-  // Préparation du HTML pour les sous-races associées
-  let subracesHtml = "";
-  if (trait.subraces && trait.subraces.length > 0) {
-    subracesHtml = `
-      <div class="trait-subraces">
-        <strong>Sous-races :</strong> ${trait.subraces
-          .map((s) => s.name)
-          .join(", ")}
-      </div>
-    `;
-  }
-
-  // Traitement de la description (souvent un tableau de chaînes dans l'API)
-  const description = trait.desc
-    ? trait.desc.join("\n\n")
-    : "Aucune description disponible.";
-
-  // Injection du HTML final dans le DOM
-  racialTraitsResult.innerHTML = `
-    <div class="trait-card">
-      <h2 class="trait-title">${trait.name}</h2>
-      ${racesHtml}
-      ${subracesHtml}
-      <div class="trait-description">
-        ${DndMarkdown.parse(description)}
-      </div>
-    </div>
-  `;
 }
