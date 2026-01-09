@@ -121,12 +121,25 @@ function renderCard(item) {
     stat3Tooltip = "Niveau de rareté de l'objet magique";
   }
 
+const normalizedIndex = item.index.replace(/-/g, "_");
+const imagePath = `/src/assets/images/${normalizedIndex}.webp`;
+
+
   let html = `
     <div class="monster-card">
       <div class="monster-header">
         <h2>${item.name}</h2>
         <p>${type}</p>
       </div>
+
+      <div class="item-image">
+      <img 
+        src="${imagePath}" 
+        class="monster-image"
+        alt="Illustration de ${item.name}"
+        onerror="this.style.display='none'"
+      />
+    </div>
 
       <div class="monster-stats-top">
         <p><strong>Catégorie :</strong> ${type}</p>
