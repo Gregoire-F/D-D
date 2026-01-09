@@ -59,8 +59,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>`;
 
     container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${type} ${
       data.equipment_category ? "- " + data.equipment_category.name : ""
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             ${imageHtml}
 
-            <div class="monster-content">
+            <div class="entity-content">
                 <div style="display:flex; justify-content:space-around; flex-wrap:wrap; gap:10px; background:#eee; padding:15px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; text-align:center;">
                     ${
                       data.cost
@@ -118,8 +118,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       data.name.trim().toLowerCase().replace(/\s+/g, "_") + ".webp";
     const imagePath = `../../assets/images/monsters/${imageName}`;
     container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${data.size} ${data.type}, ${data.alignment}</em></p>
             </div>
