@@ -3,6 +3,21 @@
  * Une carte réutilisable pour la page d'accueil D&D qui gère les icônes, le texte et la redirection.
  * Cette version utilise le DOM "léger" (Light DOM) pour permettre un stylage global depuis accueil.css.
  */
+
+document.addEventListener("favorite-select", e => {
+  const { entity, index } = e.detail;
+
+  switch(entity) {
+    case "background":
+      window.location.href = `pages/background/background.html?index=${index}`;
+      break;
+    case "class":
+      window.location.href = `pages/class/class.html?index=${index}`;
+      break;
+    // ajouter les autres types si besoin
+  }
+});
+
 class CategoryCard extends HTMLElement {
   constructor() {
     // Appelle le constructeur de la classe parente (HTMLElement)
