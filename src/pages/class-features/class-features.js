@@ -17,8 +17,18 @@ window.addEventListener("DOMContentLoaded", async () => {
     const response = await fetch("https://www.dnd5eapi.co/api/2014/features");
     const data = await response.json();
 
-    // Tri alphabétique des features par nom
-    allClassFeatures = data.results.sort((a, b) => a.name.localeCompare(b.name));
+    // Filtrer pour ne garder qu'une seule occurrence par nom d'aptitude
+    const uniqueFeaturesMap = new Map();
+    data.results.forEach((feature) => {
+      if (!uniqueFeaturesMap.has(feature.name)) {
+        uniqueFeaturesMap.set(feature.name, feature);
+      }
+    });
+
+    // Convertir le Map en tableau et trier alphabétiquement
+    allClassFeatures = Array.from(uniqueFeaturesMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
 
     // Peupler le dropdown avec les WebComponents
     const options = allClassFeatures.map((feature) => ({
@@ -126,7 +136,6 @@ async function searchFeatures(featureName) {
         </div>
       </div>
     `;
-
   } catch (error) {
     console.error(error);
     classFeaturesResult.innerHTML = "Erreur lors de la recherche.";

@@ -71,10 +71,22 @@ function formatWeight(weight) {
   return `${weight} lb`;
 }
 
-function formatProperties(properties) {
-  if (!properties || properties.length === 0) return "Aucune";
-  return properties.map(p => p.name).join(", ");
-}
+function renderCard(item) {
+  const type = item.equipment_category ? item.equipment_category.name : "Objet";
+  const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
+  const weight = item.weight ? `${item.weight} lb` : "-";
+
+  // --- LOGIQUE IMAGE (AJOUTÉ) ---
+  // Construction du nom de fichier : "Dagger" -> "dagger.webp"
+  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+  // Chemin vers le dossier images depuis pages/item/
+  const imagePath = `../../assets/images/equipment/${imageName}`;
+
+  // Logique pour la 3ème stat
+  let stat3Label = "Info";
+  let stat3Value = "-";
+  let stat3Tooltip = "";
+};
 
 function getItemThirdStat(item) {
   if (item.armor_class) {
@@ -96,99 +108,72 @@ function getItemThirdStat(item) {
       tooltip: "Niveau de rareté de l'objet magique"
     };
   }
-  return {
-    label: "Info",
-    value: "-",
-    tooltip: "Information supplémentaire"
-  };
-}
 
-// ========================================
-// FONCTION PRINCIPALE DE RECHERCHE
-// ========================================
-async function searchItem(itemName) {
-  itemResult.innerHTML = "Recherche en cours...";
 
-  try {
-    // Recherche de l'item dans le cache
-    const matchedItem = allItems.find(
-      (item) => item.name.toLowerCase() === itemName
-    );
-
-    if (!matchedItem) {
-      itemResult.innerHTML = "Item non trouvé.";
-      return;
-    }
-
-    // Récupérer les détails complets de l'item
-    const response = await fetch(
-      `https://www.dnd5eapi.co${matchedItem.url}`
-    );
-    const itemData = await response.json();
-
-    const type = itemData.equipment_category ? itemData.equipment_category.name : "Objet";
-    const thirdStat = getItemThirdStat(itemData);
-
-    // Construction de la fiche d'item
-    itemResult.innerHTML = `
-      <div class="entity-card">
-        <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="entity-header">
-          <h2>${itemData.name}</h2>
-          <p><em>${type}</em></p>
-        </div>
-
-        <!-- Statistiques principales -->
-        <div class="entity-stats-top">
-          <p><strong class="tooltip" data-tooltip="Catégorie de l'objet.">Catégorie:</strong> ${type}</p>
-          <p><strong class="tooltip" data-tooltip="Poids de l'objet.">Poids:</strong> ${formatWeight(itemData.weight)}</p>
-          <p><strong class="tooltip" data-tooltip="${thirdStat.tooltip}">${thirdStat.label}:</strong> ${thirdStat.value}</p>
-        </div>
-
-        <!-- Caractéristiques avec WebComponent -->
-        <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
-
-        <!-- Informations de jeu -->
-        <div class="entity-details">
-          <p><strong class="tooltip" data-tooltip="Prix de l'objet.">Coût:</strong> ${formatCost(itemData.cost)}</p>
-          <p><strong>Propriétés:</strong> ${formatProperties(itemData.properties)}</p>
-        </div>
-
-        <!-- Description et capacités spéciales -->
-        <div class="entity-content">
-          <h3>Description</h3>
-          <ul>
-            ${
-              itemData.desc && itemData.desc.length > 0
-                ? itemData.desc.map(line => `<li>${DndMarkdown.parse(line)}</li>`).join("")
-                : `<li>Pas de description détaillée disponible.</li>`
-            }
-          </ul>
-        </div>
+  let html = `
+    <div class="monster-card">
+      <div class="monster-header">
+        <h2>${item.name}</h2>
+        <p>${type}</p>
       </div>
-    `;
 
-    // Peupler le composant stat-grid avec les stats de l'item
-    const statGrid = itemResult.querySelector("#monsterStats");
-    statGrid.stats = [
-      {
-        label: "Coût",
-        value: formatCost(itemData.cost),
-        tooltip: "Prix de l'objet en pièces",
-      },
-      {
-        label: "Poids",
-        value: formatWeight(itemData.weight),
-        tooltip: "Poids de l'objet en livres",
-      },
-      {
-        label: thirdStat.label,
-        value: thirdStat.value,
-        tooltip: thirdStat.tooltip,
-      },
-    ];
-  } catch (error) {
-    console.error(error);
-    itemResult.innerHTML = "Erreur lors de la recherche.";
+      <div style="text-align:center; margin-bottom: 20px;">
+          <img src="${imagePath}" 
+               alt="${item.name}"
+               style="max-width:250px; max-height:250px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" 
+               onerror="this.style.display='none';">
+      </div>
+
+      <div class="monster-stats-top">
+        <p><strong>Catégorie :</strong> ${type}</p>
+      </div>
+
+      <dnd-stat-grid id="itemStats"></dnd-stat-grid>
+
+      <div class="monster-actions">
+        <h3>Description & Propriétés</h3>
+        <ul>`;
+
+  if (item.desc && item.desc.length > 0) {
+    item.desc.forEach((line) => {
+      html += `<li>${DndMarkdown.parse(line)}</li>`;
+    });
+  } else {
+    html += `<li>Pas de description détaillée disponible.</li>`;
   }
+
+  if (item.properties && item.properties.length > 0) {
+    html += `<li><strong>Propriétés: </strong>`;
+    html += item.properties
+      .map(
+        (p) =>
+          `<span class="tooltip" data-tooltip="Propriété de l'arme">${p.name}</span>`
+      )
+      .join(", ");
+    html += `</li>`;
+  }
+
+  html += `</ul></div></div>`;
+
+  resultArea.innerHTML = html;
+
+  // Peupler le composant stat-grid avec les stats de l'item
+  const statGrid = resultArea.querySelector("#itemStats");
+  statGrid.stats = [
+    {
+      label: "Coût",
+      value: cost,
+      tooltip: "Prix de l'objet en pièces",
+    },
+    {
+      label: "Poids",
+      value: weight,
+      tooltip: "Poids de l'objet en livres",
+    },
+    {
+      label: stat3Label,
+      value: stat3Value,
+      tooltip: stat3Tooltip || "Information supplémentaire",
+    },
+  ];
 }
