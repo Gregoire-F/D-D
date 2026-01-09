@@ -101,6 +101,12 @@ function renderCard(item) {
   const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
   const weight = item.weight ? `${item.weight} lb` : "-";
 
+  // --- LOGIQUE IMAGE (AJOUTÉ) ---
+  // Construction du nom de fichier : "Dagger" -> "dagger.webp"
+  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+  // Chemin vers le dossier images depuis pages/item/
+  const imagePath = `../../assets/images/pictures_webp/equipment/${imageName}`;
+
   // Logique pour la 3ème stat
   let stat3Label = "Info";
   let stat3Value = "-";
@@ -121,9 +127,6 @@ function renderCard(item) {
     stat3Tooltip = "Niveau de rareté de l'objet magique";
   }
 
-const normalizedIndex = item.index.replace(/-/g, "_");
-const imagePath = `/src/assets/images/${normalizedIndex}.webp`;
-
 
   let html = `
     <div class="monster-card">
@@ -132,20 +135,17 @@ const imagePath = `/src/assets/images/${normalizedIndex}.webp`;
         <p>${type}</p>
       </div>
 
-      <div class="item-image">
-      <img 
-        src="${imagePath}" 
-        class="monster-image"
-        alt="Illustration de ${item.name}"
-        onerror="this.style.display='none'"
-      />
-    </div>
+      <div style="text-align:center; margin-bottom: 20px;">
+          <img src="${imagePath}" 
+               alt="${item.name}"
+               style="max-width:250px; max-height:250px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" 
+               onerror="this.style.display='none';">
+      </div>
 
       <div class="monster-stats-top">
         <p><strong>Catégorie :</strong> ${type}</p>
       </div>
 
-      <!-- Stats de l'item (WebComponent) -->
       <dnd-stat-grid id="itemStats"></dnd-stat-grid>
 
       <div class="monster-actions">
