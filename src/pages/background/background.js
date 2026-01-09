@@ -13,7 +13,9 @@ let allBackgrounds = [];
 // ========================================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    const response = await fetch("https://www.dnd5eapi.co/api/2014/backgrounds");
+    const response = await fetch(
+      "https://www.dnd5eapi.co/api/2014/backgrounds"
+    );
     const data = await response.json();
 
     // Tri alphabétique des backgrounds par nom
@@ -77,53 +79,92 @@ async function searchBackground(backgroundName) {
 
     // Construction de la fiche de background
     backgroundResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${backgroundData.index}"
+        name="${backgroundData.name}"
+        url="${backgroundData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom -->
         <div class="entity-header">
           <h2>${backgroundData.name}</h2>
           <p><em>Background</em></p>
         </div>
+        
+        
 
         <!-- Informations principales -->
         <div class="entity-details">
-          <p><strong class="tooltip" data-tooltip="Compétences : Compétences obtenues grâce à ce background.">Compétences:</strong> ${backgroundData.proficiencies?.map(p => p.name).join(", ") || "Aucune"}</p>
-          <p><strong class="tooltip" data-tooltip="Langues : Langues obtenues grâce à ce background.">Langues:</strong> ${backgroundData.language_proficiencies?.map(l => l.name).join(", ") || "Aucune"}</p>
-          <p><strong class="tooltip" data-tooltip="Équipement de départ : Équipement obtenu au début.">Équipement de départ:</strong> ${backgroundData.starting_equipment?.map(e => e.equipment?.name || e.name).join(", ") || "Aucun"}</p>
+          <p><strong class="tooltip" data-tooltip="Compétences : Compétences obtenues grâce à ce background.">Compétences:</strong> ${
+            backgroundData.proficiencies?.map((p) => p.name).join(", ") ||
+            "Aucune"
+          }</p>
+          <p><strong class="tooltip" data-tooltip="Langues : Langues obtenues grâce à ce background.">Langues:</strong> ${
+            backgroundData.language_proficiencies
+              ?.map((l) => l.name)
+              .join(", ") || "Aucune"
+          }</p>
+          <p><strong class="tooltip" data-tooltip="Équipement de départ : Équipement obtenu au début.">Équipement de départ:</strong> ${
+            backgroundData.starting_equipment
+              ?.map((e) => e.equipment?.name || e.name)
+              .join(", ") || "Aucun"
+          }</p>
         </div>
 
         <!-- Traits -->
         <div class="entity-content">
           <h3>Traits</h3>
-          ${backgroundData.personality_traits ? 
-            `<dnd-markdown>${backgroundData.personality_traits.from ? backgroundData.personality_traits.from.name : ""}</dnd-markdown>` : 
-            "Aucun trait disponible."
+          ${
+            backgroundData.personality_traits
+              ? `<dnd-markdown>${
+                  backgroundData.personality_traits.from
+                    ? backgroundData.personality_traits.from.name
+                    : ""
+                }</dnd-markdown>`
+              : "Aucun trait disponible."
           }
         </div>
 
         <!-- Idéaux -->
         <div class="entity-content">
           <h3>Idéaux</h3>
-          ${backgroundData.ideals ? 
-            `<dnd-markdown>${backgroundData.ideals.from ? backgroundData.ideals.from.name : ""}</dnd-markdown>` : 
-            "Aucun idéal disponible."
+          ${
+            backgroundData.ideals
+              ? `<dnd-markdown>${
+                  backgroundData.ideals.from
+                    ? backgroundData.ideals.from.name
+                    : ""
+                }</dnd-markdown>`
+              : "Aucun idéal disponible."
           }
         </div>
 
         <!-- Liens -->
         <div class="entity-content">
           <h3>Liens</h3>
-          ${backgroundData.bonds ? 
-            `<dnd-markdown>${backgroundData.bonds.from ? backgroundData.bonds.from.name : ""}</dnd-markdown>` : 
-            "Aucun lien disponible."
+          ${
+            backgroundData.bonds
+              ? `<dnd-markdown>${
+                  backgroundData.bonds.from
+                    ? backgroundData.bonds.from.name
+                    : ""
+                }</dnd-markdown>`
+              : "Aucun lien disponible."
           }
         </div>
 
         <!-- Défauts -->
         <div class="entity-content">
           <h3>Défauts</h3>
-          ${backgroundData.flaws ? 
-            `<dnd-markdown>${backgroundData.flaws.from ? backgroundData.flaws.from.name : ""}</dnd-markdown>` : 
-            "Aucun défaut disponible."
+          ${
+            backgroundData.flaws
+              ? `<dnd-markdown>${
+                  backgroundData.flaws.from
+                    ? backgroundData.flaws.from.name
+                    : ""
+                }</dnd-markdown>`
+              : "Aucun défaut disponible."
           }
         </div>
       </div>

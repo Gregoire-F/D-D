@@ -1,18 +1,18 @@
 class DndNavbar extends HTMLElement {
-    constructor() {
-        super();
-        this.rootPath = this.getAttribute("root") || ".";
-    }
+  constructor() {
+    super();
+    this.rootPath = this.getAttribute("root") || ".";
+  }
 
-    connectedCallback() {
-        // On force le composant lui-même à être un bloc collant
-        this.style.display = "block";
-        this.style.position = "sticky";
-        this.style.top = "0";
-        this.style.zIndex = "9999"; // Très haut pour passer au-dessus de tout
-        this.style.width = "100%";
+  connectedCallback() {
+    // On force le composant lui-même à être un bloc collant
+    this.style.display = "block";
+    this.style.position = "sticky";
+    this.style.top = "0";
+    this.style.zIndex = "9999"; // Très haut pour passer au-dessus de tout
+    this.style.width = "100%";
 
-        this.innerHTML = `
+    this.innerHTML = `
         <style>
             /* Reset pour éviter les débordements */
             * { box-sizing: border-box; }
@@ -134,6 +134,9 @@ class DndNavbar extends HTMLElement {
             <a href="${this.rootPath}/index.html" class="nav-brand">
                 <i class="fas fa-dice-d20"></i> D&D Codex
             </a>
+            <section id="favorites-section">
+      <favorites-global></favorites-global>
+    </section>
             <div class="global-search-container">
                 <input type="text" id="globalSearchInput" placeholder="Rechercher (Dragon, Sort, Règle...)" autocomplete="off" />
                 <div id="globalSearchResults" class="search-dropdown"></div>
@@ -141,102 +144,108 @@ class DndNavbar extends HTMLElement {
         </nav>
         `;
 
-        this.initSearch();
+    this.initSearch();
+  }
+
+  async initSearch() {
+    const input = this.querySelector("#globalSearchInput");
+    const resultsDiv = this.querySelector("#globalSearchResults");
+
+    // Liste complète des endpoints API
+    const endpoints = [
+      { url: "monsters", type: "Monstre" },
+      { url: "spells", type: "Sort" },
+      { url: "classes", type: "Classe" },
+      { url: "equipment", type: "Item" },
+      { url: "magic-items", type: "Item Magique" },
+      { url: "races", type: "Race" },
+      { url: "rules", type: "Règle" },
+      { url: "rule-sections", type: "Section Règle" },
+      { url: "feats", type: "Don" },
+      { url: "traits", type: "Trait" },
+      { url: "skills", type: "Compétence" },
+      { url: "features", type: "Aptitude" },
+      { url: "languages", type: "Langue" },
+      { url: "subclasses", type: "Sous-classe" },
+      { url: "proficiencies", type: "Maîtrise" },
+      { url: "alignments", type: "Alignement" },
+      { url: "backgrounds", type: "Historique" },
+      { url: "conditions", type: "État" },
+      { url: "damage-types", type: "Type Dégât" },
+      { url: "magic-schools", type: "École Magie" },
+      { url: "ability-scores", type: "Caractéristique" },
+    ];
+
+    let allItems = [];
+
+    try {
+      // Chargement parallèle
+      const promises = endpoints.map((ep) =>
+        fetch(`https://www.dnd5eapi.co/api/2014/${ep.url}`)
+          .then((r) => r.json())
+          .then((data) =>
+            data.results.map((item) => ({ ...item, type: ep.type }))
+          )
+          .catch(() => [])
+      );
+
+      const results = await Promise.all(promises);
+      allItems = results.flat();
+      console.log(`D&D Navbar: ${allItems.length} éléments chargés.`);
+    } catch (e) {
+      console.error("Erreur chargement navbar", e);
     }
 
-    async initSearch() {
-        const input = this.querySelector("#globalSearchInput");
-        const resultsDiv = this.querySelector("#globalSearchResults");
+    input.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      resultsDiv.innerHTML = "";
 
-        // Liste complète des endpoints API
-        const endpoints = [
-            { url: "monsters", type: "Monstre" },
-            { url: "spells", type: "Sort" },
-            { url: "classes", type: "Classe" },
-            { url: "equipment", type: "Item" },
-            { url: "magic-items", type: "Item Magique" },
-            { url: "races", type: "Race" },
-            { url: "rules", type: "Règle" },
-            { url: "rule-sections", type: "Section Règle" },
-            { url: "feats", type: "Don" },
-            { url: "traits", type: "Trait" },
-            { url: "skills", type: "Compétence" },
-            { url: "features", type: "Aptitude" },
-            { url: "languages", type: "Langue" },
-            { url: "subclasses", type: "Sous-classe" },
-            { url: "proficiencies", type: "Maîtrise" },
-            { url: "alignments", type: "Alignement" },
-            { url: "backgrounds", type: "Historique" },
-            { url: "conditions", type: "État" },
-            { url: "damage-types", type: "Type Dégât" },
-            { url: "magic-schools", type: "École Magie" },
-            { url: "ability-scores", type: "Caractéristique" }
-        ];
+      if (query.length < 2) {
+        resultsDiv.classList.remove("active");
+        return;
+      }
 
-        let allItems = [];
+      // Recherche filtrée (top 100)
+      const hits = allItems
+        .filter(
+          (item) =>
+            item.name.toLowerCase().includes(query) ||
+            item.type.toLowerCase().includes(query)
+        )
+        .slice(0, 100);
 
-        try {
-            // Chargement parallèle
-            const promises = endpoints.map(ep => 
-                fetch(`https://www.dnd5eapi.co/api/2014/${ep.url}`)
-                    .then(r => r.json())
-                    .then(data => data.results.map(item => ({ ...item, type: ep.type })))
-                    .catch(() => []) 
-            );
+      if (hits.length > 0) {
+        resultsDiv.classList.add("active");
+        const fragment = document.createDocumentFragment();
 
-            const results = await Promise.all(promises);
-            allItems = results.flat();
-            console.log(`D&D Navbar: ${allItems.length} éléments chargés.`);
+        hits.forEach((hit) => {
+          const div = document.createElement("div");
+          div.className = "search-result-item";
+          div.innerHTML = `<span>${hit.name}</span><span class="type-tag">${hit.type}</span>`;
 
-        } catch(e) { console.error("Erreur chargement navbar", e); }
+          // --- REDIRECTION VERS LA FICHE ---
+          div.addEventListener("click", () => {
+            // Utilise le chemin correct vers la page fiche universelle
+            const targetUrl = `${this.rootPath}/pages/fiche/fiche.html?url=${hit.url}&type=${hit.type}`;
+            window.location.href = targetUrl;
+          });
 
-        input.addEventListener("input", (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            resultsDiv.innerHTML = "";
-            
-            if (query.length < 2) {
-                resultsDiv.classList.remove("active");
-                return;
-            }
-
-            // Recherche filtrée (top 100)
-            const hits = allItems.filter(item => 
-                item.name.toLowerCase().includes(query) || 
-                item.type.toLowerCase().includes(query)
-            ).slice(0, 100);
-
-            if(hits.length > 0) {
-                resultsDiv.classList.add("active");
-                const fragment = document.createDocumentFragment();
-
-                hits.forEach(hit => {
-                    const div = document.createElement("div");
-                    div.className = "search-result-item";
-                    div.innerHTML = `<span>${hit.name}</span><span class="type-tag">${hit.type}</span>`;
-                    
-                    // --- REDIRECTION VERS LA FICHE ---
-                    div.addEventListener("click", () => {
-                        // Utilise le chemin correct vers la page fiche universelle
-                        const targetUrl = `${this.rootPath}/pages/fiche/fiche.html?url=${hit.url}&type=${hit.type}`;
-                        window.location.href = targetUrl;
-                    });
-                    
-                    fragment.appendChild(div);
-                });
-                
-                resultsDiv.appendChild(fragment);
-            } else {
-                resultsDiv.classList.remove("active");
-            }
+          fragment.appendChild(div);
         });
 
-        // Fermeture au clic dehors
-        document.addEventListener("click", (e) => {
-            if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
-                resultsDiv.classList.remove("active");
-            }
-        });
-    }
+        resultsDiv.appendChild(fragment);
+      } else {
+        resultsDiv.classList.remove("active");
+      }
+    });
+
+    // Fermeture au clic dehors
+    document.addEventListener("click", (e) => {
+      if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
+        resultsDiv.classList.remove("active");
+      }
+    });
+  }
 }
 
 customElements.define("dnd-navbar", DndNavbar);

@@ -196,13 +196,22 @@ async function showSpellDetails(spellUrl) {
     });
 
     modalContent.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${spell.index}"
+        name="${spell.name}"
+        url="${spell.url}">
+      </favorite-toggle>
       <div class="spell-card">
         <button class="modal-close" onclick="closeSpellModal()">&times;</button>
         <h2>${spell.name}</h2>
+        
         <p><em>
           ${spell.level === 0 ? "Sortilège" : "Niveau " + spell.level}
           - ${spell.school.name}
         </em></p>
+
+        
 
         <dnd-stat-grid id="modalSpellStats"></dnd-stat-grid>
 
@@ -293,7 +302,7 @@ async function searchClass(indexOrName) {
     const spellCount = spells.length;
 
     // Gestion de l'image
-    const imagePath = `../../assets/images/classes/${heroData.index}.jpg`;
+    const imagePath = `../../assets/images/classes/${heroData.index}.webp`;
     const placeholder = `https://placehold.co/600x400/8b0000/FFF?text=${heroData.name}`;
 
     heroResult.innerHTML = `

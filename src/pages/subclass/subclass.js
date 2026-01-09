@@ -106,11 +106,19 @@ async function searchSub(subclassesName) {
 
     // Construction de la fiche d'aptitude
     subclassResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${subData.index}"
+        name="${subData.name}"
+        url="${subData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
         <div class="entity-header">
           <h2>${subData.name}</h2>
         </div>
+
+        
 
         <!-- Statistiques principales de l'aptitude -->
         <div class="entity-stats-top">

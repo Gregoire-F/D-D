@@ -66,6 +66,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       data.equipment_category ? "- " + data.equipment_category.name : ""
     }</em></p>
             </div>
+
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
             
             ${imageHtml}
 
@@ -123,6 +130,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h1>${data.name}</h1>
                 <p><em>${data.size} ${data.type}, ${data.alignment}</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+
             <div style="text-align:center;"><img src="${imagePath}" style="max-width:300px; border-radius:8px; margin-bottom:20px;"></div>
             
             <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; text-align:center; background:#eee; padding:15px; border-radius:8px; margin-bottom:20px;">
@@ -161,6 +175,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                   data.level === 0 ? "Tour de magie" : "Niveau " + data.level
                 } • ${data.school.name}</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+
             <div style="display:flex; gap:20px; margin-bottom:20px; font-weight:bold; color:#555;">
                 <span>⏱ ${data.casting_time}</span>
                 <span>📏 ${data.range}</span>
@@ -186,6 +207,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h1>${data.name}</h1>
                 <p><em>Classe</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+
             <div class="entity-content">
                 <p><strong>Dé de vie :</strong> d${data.hit_die}</p>
                 <h3>Maîtrises</h3>
@@ -206,6 +234,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h1>${data.name}</h1>
                 <p><em>Race - Vitesse : ${data.speed} ft</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+
             <div style="margin-bottom:20px;">
                 <strong>Taille :</strong> ${
                   data.size
@@ -239,6 +274,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h1>${data.name}</h1>
                 <p><em>${type}</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+
             <div class="entity-content">${
               content ? `<p>${content}</p>` : ""
             }</div>
@@ -262,6 +304,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h1>${data.name}</h1>
                 <p><em>${type}</em></p>
             </div>
+            <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
+      
             <div class="entity-content">
                 ${
                   data.cost

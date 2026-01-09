@@ -86,11 +86,19 @@ async function searchProficiency(profIndex) {
     const imagePath = getProficiencyImagePath(data.name);
 
     profResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${data.index}"
+        name="${data.name}"
+        url="${data.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <div class="entity-header">
           <h2>${data.name}</h2>
           <p><strong>Type :</strong> ${data.type}</p>
         </div>
+
+        
 
         <div class="entity-image-container" style="text-align: center; margin: 20px 0;">
           <img src="${imagePath}" 

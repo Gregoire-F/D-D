@@ -21,7 +21,8 @@ body {
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   line-height: 1.6;
@@ -98,6 +99,35 @@ category-card h2 {
 category-card p {
   color: var(--text-muted);
   font-size: 0.9rem;
+}
+
+/* --- BOUTON INFO --- */
+.info-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -1rem;
+}
+
+.info-btn {
+  background-color: #e0f2fe; /* Bleu ciel clair */
+  color: #0369a1; /* Bleu foncé pour le texte */
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  transition: var(--transition);
+  text-decoration: none;
+  border-bottom: none; /* Override du style global des liens */
+}
+
+.info-btn:hover {
+  background-color: #0369a1; /* Bleu plus foncé */
+  color: white;
+  border-bottom: none;
 }
 
 @media (max-width: 768px) {

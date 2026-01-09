@@ -116,11 +116,19 @@ async function searchFeatures(featureName) {
 
     // Construction de la fiche d'aptitude
     classFeaturesResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${featureData.index}"
+        name="${featureData.name}"
+        url="${featureData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
         <div class="entity-header">
           <h2>${featureData.name}</h2>
         </div>
+
+        
 
         <!-- Statistiques principales de l'aptitude -->
         <div class="entity-stats-top">

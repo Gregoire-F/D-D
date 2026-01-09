@@ -15,20 +15,17 @@
   </head>
 
   <body>
-    <!DOCTYPE html>
-    <html lang="fr">
-      <head> </head>
+    <dnd-navbar root="."></dnd-navbar>
 
-      <body>
-        <dnd-navbar root="."></dnd-navbar>
-
-        <div class="container"></div>
-
-        <script src="components/dnd-navbar.js"></script>
-      </body>
-    </html>
+    <script src="components/dnd-navbar.js"></script>
+    <script type="module" src="components/dnd-favorite.js"></script>
     <div class="container">
       <header>
+        <div class="info-container">
+          <a href="./pages/readme.html" class="info-btn">
+            <i class="fas fa-info-circle"></i> Info
+          </a>
+        </div>
         <h1>Dungeons & Dragons</h1>
         <p class="subtitle">Explorez les mystères de l'univers D&D</p>
       </header>

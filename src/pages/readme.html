@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D&D Codex - Informations</title>
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #8b0000;
+        --secondary-color: #900909;
+        --bg-color: #f8f9fa;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+        --code-bg: #f1f3f5;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 40px;
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      header {
+        border-bottom: 2px solid #eee;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+      }
+
+      h1 {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      h2 {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 8px;
+        margin-top: 40px;
+      }
+
+      h3 {
+        color: #444;
+        font-size: 1.3rem;
+        margin-top: 25px;
+      }
+
+      p {
+        margin-bottom: 1.5rem;
+      }
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 20px;
+        transition: color 0.2s;
+      }
+
+      .back-link:hover {
+        color: var(--secondary-color);
+      }
+
+      pre {
+        background-color: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: "Fira Code", "Courier New", Courier, monospace;
+        font-size: 0.9rem;
+        border-left: 4px solid var(--primary-color);
+        margin: 20px 0;
+      }
+
+      code {
+        background-color: var(--code-bg);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-weight: 500;
+      }
+
+      ul,
+      ol {
+        padding-left: 20px;
+        margin-bottom: 1.5rem;
+      }
+
+      li {
+        margin-bottom: 0.5rem;
+      }
+
+      strong {
+        color: #000;
+      }
+
+      a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .feature-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .feature-list li {
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .feature-list i {
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        margin-top: 4px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        background: var(--primary-color);
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 0;
+          border-radius: 0;
+          padding: 20px;
+        }
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="../index.html" class="back-link">
+        <i class="fas fa-arrow-left"></i> Retour à l'accueil
+      </a>
+
+      <header>
+        <div class="badge">Documentation</div>
+        <h1><i class="fas fa-scroll"></i> Informations - D&D Codex</h1>
+      </header>
+
+      <section>
+        <h2>Le Projet</h2>
+        <p>
+          Le projet <strong>Donjons et Dragons</strong> est une réalisation de
+          groupe de la classe <strong>DWWM 25-26</strong>. Les technologies
+          utilisées sont le <strong>HTML</strong>, <strong>CSS</strong>,
+          <strong>JavaScript</strong> et <strong>Git</strong> pour le
+          déploiement collaboratif via <strong>GitHub</strong>.
+        </p>
+        <p>
+          Nous exploitons l'<strong>API Dungeons & Dragons</strong> :
+          <a href="https://www.dnd5eapi.co/api/2014" target="_blank"
+            >https://www.dnd5eapi.co/api/2014</a
+          >. Ce projet permet aux joueurs et maîtres du jeu de consulter les
+          monstres, sorts, objets, classes, etc., avec des outils utiles tels
+          que des lanceurs de dés et une table de mixage d'ambiance sonore
+          (soundboard).
+        </p>
+        <p>
+          <strong>Url du site :</strong>
+          <a href="https://gregoire-f.github.io/D-D/" target="_blank"
+            >https://gregoire-f.github.io/D-D/</a
+          >
+        </p>
+
+        <h2>Structure du Projet</h2>
+        <pre>
+DungeonsDragons/
+├── src/
+│   ├── assets/       # Images, sons et ressources statiques
+│   ├── components/   # Web Components (navbar, dice-roller, etc.)
+│   ├── pages/        # Pages spécifiques (monstres, sorts, héros, etc.)
+│   ├── style.css     # Styles globaux et variables de design
+│   ├── script.js     # Logique principale
+│   └── index.html    # Point d'entrée de l'application
+├── .github/          # Workflows et configurations GitHub
+└── README.md         # Documentation technique originale</pre
+        >
+
+        <h2>Installation & Utilisation</h2>
+        <ol>
+          <li>
+            <strong>Cloner le dépôt :</strong>
+            <pre>git clone https://github.com/Gregoire-F/D-D.git</pre>
+          </li>
+          <li>
+            <strong>Lancer le projet :</strong>
+            <ul>
+              <li>
+                Ouvrez <code>src/index.html</code> directement dans votre
+                navigateur.
+              </li>
+              <li>
+                <em>Recommandation :</em> Utilisez une extension comme
+                <strong>Live Server</strong> (VS Code) pour éviter les problèmes
+                de CORS lors des appels API.
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong>Serveur local alternatif :</strong>
+            <pre>
+# Avec Python
+python -m http.server 8000 --directory src
+
+# Avec Node.js
+npx serve src</pre
+            >
+          </li>
+        </ol>
+
+        <h2>Licence</h2>
+        <p>
+          Ce projet est éducatif. Les données D&D appartiennent à
+          <em>Wizards of the Coast</em>. Les interfaces et traitements sont sous
+          <strong>Licence MIT</strong>.
+        </p>
+        <p>
+          <strong>Que permet la licence MIT ?</strong> Le projet est utilisable
+          librement, même à des fins commerciales. Il est possible de copier ou
+          modifier le code, à condition de conserver la licence et le copyright
+          original. Aucune garantie n'est fournie.
+        </p>
+
+        <h2>Fonctionnalités Clés</h2>
+        <ul class="feature-list">
+          <li>
+            <i class="fas fa-search"></i>
+            <div>
+              <strong>Système de Recherche :</strong>
+              Recherche globale via la barre de navigation ou par catégories
+              spécifiques sur la page d'accueil.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-music"></i>
+            <div>
+              <strong>Soundboard d'Ambiance :</strong>
+              Pistes audio variées (Combat, Ambiance, Autre) et mixage
+              multi-pistes pour une immersion totale.
+            </div>
+          </li>
+          <li>
+            <i class="fas fa-dice-d20"></i>
+            <div>
+              <strong>Lanceur de Dés :</strong>
+              Outil interactif permettant de configurer le nombre de faces et de
+              dés pour des jets instantanés.
+            </div>
+          </li>
+        </ul>
+
+        <h2>Pages Principales</h2>
+        <h3><i class="fas fa-home"></i> Accueil</h3>
+        <p>
+          Tableau de bord global. Accès direct aux catégories (Héros, Sorts,
+          Items, Monstres, etc.) via des cartes cliquables. La NavBar permet une
+          recherche rapide n'importe où sur le site.
+        </p>
+
+        <h3><i class="fas fa-volume-up"></i> Table de Mixage (Sons)</h3>
+        <ul>
+          <li><strong>Mode Lecteur :</strong> Joue une piste à la fois.</li>
+          <li>
+            <strong>Mode Mixage :</strong> Superposez plusieurs sons pour créer
+            votre propre atmosphère.
+          </li>
+          <li>
+            <strong>Scénarios :</strong> Lancez des combinaisons de sons
+            prédéfinies en un clic.
+          </li>
+        </ul>
+
+        <h3><i class="fas fa-microchip"></i> Technique</h3>
+        <p>
+          Utilisation de <strong>Web Components</strong> personnalisés avec
+          <em>Shadow DOM</em> pour une encapsulation parfaite (ex:
+          <code>DndDiceRoller</code>). Chaque composant gère son propre état et
+          ses animations de manière autonome.
+        </p>
+
+        <h2>Sources & Ressources</h2>
+        <ul>
+          <li>
+            <strong>D&D 5e API :</strong>
+            <a href="https://www.dnd5eapi.co/" target="_blank">dnd5eapi.co</a>
+          </li>
+          <li>
+            <strong>Illustrations :</strong>
+            <a href="https://lluc.github.io/dnd_pictures/" target="_blank"
+              >lluc.github.io/dnd_pictures</a
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>

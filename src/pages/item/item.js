@@ -21,7 +21,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     const magicData = await magicRes.json();
 
     // Fusion et tri alphabétique des items
-    allItems = [...eqData.results, ...magicData.results].sort((a, b) => 
+    allItems = [...eqData.results, ...magicData.results].sort((a, b) =>
       a.name.localeCompare(b.name)
     );
 
@@ -64,7 +64,7 @@ itemDropdown.addEventListener("dnd-select", (e) => {
 async function searchItem(query) {
   try {
     // Chercher l'item dans le cache
-    const foundItem = allItems.find(item => 
+    const foundItem = allItems.find((item) =>
       item.name.toLowerCase().includes(query)
     );
 
@@ -74,10 +74,10 @@ async function searchItem(query) {
     }
 
     // Récupérer les détails complets de l'item
-    const itemUrl = foundItem.url.startsWith('http') 
-      ? foundItem.url 
+    const itemUrl = foundItem.url.startsWith("http")
+      ? foundItem.url
       : `https://www.dnd5eapi.co${foundItem.url}`;
-    
+
     const response = await fetch(itemUrl);
     const itemDetails = await response.json();
 
@@ -106,27 +106,28 @@ function getItemThirdStat(item) {
   if (item.armor_class) {
     return {
       label: "AC",
-      value: item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : ""),
-      tooltip: "Classe d'armure - Protection fournie"
+      value:
+        item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : ""),
+      tooltip: "Classe d'armure - Protection fournie",
     };
   } else if (item.damage) {
     return {
-      label: "Dégâts", 
+      label: "Dégâts",
       value: `${item.damage.damage_dice} ${item.damage.damage_type.name}`,
-      tooltip: "Dégâts infligés par l'arme"
+      tooltip: "Dégâts infligés par l'arme",
     };
   } else if (item.rarity) {
     return {
       label: "Rareté",
       value: item.rarity.name,
-      tooltip: "Niveau de rareté de l'objet magique"
+      tooltip: "Niveau de rareté de l'objet magique",
     };
   }
-  
+
   return {
     label: "Info",
     value: "-",
-    tooltip: "Information supplémentaire"
+    tooltip: "Information supplémentaire",
   };
 }
 
@@ -137,7 +138,8 @@ function renderCard(item) {
 
   // --- LOGIQUE IMAGE (AJOUTÉ) ---
   // Construction du nom de fichier : "Dagger" -> "dagger.webp"
-  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+  const imageName =
+    item.name.trim().toLowerCase().replace(/\s+/g, "_") + ".webp";
   // Chemin vers le dossier images depuis pages/item/
   const imagePath = `../../assets/images/equipment/${imageName}`;
 
@@ -145,11 +147,19 @@ function renderCard(item) {
   const thirdStat = getItemThirdStat(item);
 
   let html = `
+  <favorite-toggle
+        entity="background"
+        index="${item.index}"
+        name="${item.name}"
+        url="${item.url}">
+      </favorite-toggle>
     <div class="entity-card">
       <div class="entity-header">
         <h2>${item.name}</h2>
         <p>${type}</p>
       </div>
+
+              
 
       <div style="text-align:center; margin-bottom: 20px;">
           <img src="${imagePath}" 

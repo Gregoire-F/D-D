@@ -90,12 +90,20 @@ async function searchRacialTrait(traitName) {
 
     // Construction de la fiche de trait racial
     racialTraitsResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${traitData.index}"
+        name="${traitData.name}"
+        url="${traitData.url}">
+      </favorite-toggle>
       <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
         <div class="entity-header">
           <h2>${traitData.name}</h2>
           <p><em>Trait racial</em></p>
         </div>
+
+        
 
         <!-- Statistiques principales -->
         <div class="entity-stats-top">

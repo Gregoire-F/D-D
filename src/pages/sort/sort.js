@@ -102,6 +102,13 @@ async function searchSpell(spellName) {
 
     // Construction de la fiche de sort
     spellResult.innerHTML = `
+    <favorite-toggle
+        entity="background"
+        index="${spellData.index}"
+        name="${spellData.name}"
+        url="${spellData.url}">
+      </favorite-toggle>
+
       <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
         <div class="entity-header">
@@ -109,6 +116,7 @@ async function searchSpell(spellName) {
           <p><em>${spellData.level === 0 ? "Sortilège" : "Niveau " + spellData.level} - ${spellData.school.name}</em></p>
         </div>
 
+        
         <!-- Statistiques principales de combat -->
         <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Temps nécessaire pour lancer le sort.">Incantation:</strong> ${spellData.casting_time}</p>
