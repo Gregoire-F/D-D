@@ -59,6 +59,37 @@ itemDropdown.addEventListener("dnd-select", (e) => {
 });
 
 // ========================================
+// FONCTIONS DE RECHERCHE
+// ========================================
+async function searchItem(query) {
+  try {
+    // Chercher l'item dans le cache
+    const foundItem = allItems.find(item => 
+      item.name.toLowerCase().includes(query)
+    );
+
+    if (!foundItem) {
+      itemResult.innerHTML = `<p>Aucun item trouvé pour "${query}"</p>`;
+      return;
+    }
+
+    // Récupérer les détails complets de l'item
+    const itemUrl = foundItem.url.startsWith('http') 
+      ? foundItem.url 
+      : `https://www.dnd5eapi.co${foundItem.url}`;
+    
+    const response = await fetch(itemUrl);
+    const itemDetails = await response.json();
+
+    // Afficher les détails de l'item
+    renderCard(itemDetails);
+  } catch (error) {
+    console.error("Erreur lors de la recherche:", error);
+    itemResult.innerHTML = `<p>Erreur lors du chargement de l'item</p>`;
+  }
+}
+
+// ========================================
 // FONCTIONS DE FORMATTAGE DES DONNÉES
 // ========================================
 function formatCost(cost) {
@@ -70,23 +101,6 @@ function formatWeight(weight) {
   if (!weight) return "N/A";
   return `${weight} lb`;
 }
-
-function renderCard(item) {
-  const type = item.equipment_category ? item.equipment_category.name : "Objet";
-  const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
-  const weight = item.weight ? `${item.weight} lb` : "-";
-
-  // --- LOGIQUE IMAGE (AJOUTÉ) ---
-  // Construction du nom de fichier : "Dagger" -> "dagger.webp"
-  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
-  // Chemin vers le dossier images depuis pages/item/
-  const imagePath = `../../assets/images/equipment/${imageName}`;
-
-  // Logique pour la 3ème stat
-  let stat3Label = "Info";
-  let stat3Value = "-";
-  let stat3Tooltip = "";
-};
 
 function getItemThirdStat(item) {
   if (item.armor_class) {
@@ -108,11 +122,31 @@ function getItemThirdStat(item) {
       tooltip: "Niveau de rareté de l'objet magique"
     };
   }
+  
+  return {
+    label: "Info",
+    value: "-",
+    tooltip: "Information supplémentaire"
+  };
+}
 
+function renderCard(item) {
+  const type = item.equipment_category ? item.equipment_category.name : "Objet";
+  const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
+  const weight = item.weight ? `${item.weight} lb` : "-";
+
+  // --- LOGIQUE IMAGE (AJOUTÉ) ---
+  // Construction du nom de fichier : "Dagger" -> "dagger.webp"
+  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+  // Chemin vers le dossier images depuis pages/item/
+  const imagePath = `../../assets/images/equipment/${imageName}`;
+
+  // Logique pour la 3ème stat
+  const thirdStat = getItemThirdStat(item);
 
   let html = `
-    <div class="monster-card">
-      <div class="monster-header">
+    <div class="entity-card">
+      <div class="entity-header">
         <h2>${item.name}</h2>
         <p>${type}</p>
       </div>
@@ -155,10 +189,10 @@ function getItemThirdStat(item) {
 
   html += `</ul></div></div>`;
 
-  resultArea.innerHTML = html;
+  itemResult.innerHTML = html;
 
   // Peupler le composant stat-grid avec les stats de l'item
-  const statGrid = resultArea.querySelector("#itemStats");
+  const statGrid = itemResult.querySelector("#itemStats");
   statGrid.stats = [
     {
       label: "Coût",
@@ -171,9 +205,9 @@ function getItemThirdStat(item) {
       tooltip: "Poids de l'objet en livres",
     },
     {
-      label: stat3Label,
-      value: stat3Value,
-      tooltip: stat3Tooltip || "Information supplémentaire",
+      label: thirdStat.label,
+      value: thirdStat.value,
+      tooltip: thirdStat.tooltip,
     },
   ];
 }

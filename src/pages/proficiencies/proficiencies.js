@@ -86,13 +86,13 @@ async function searchProficiency(profIndex) {
     const imagePath = getProficiencyImagePath(data.name);
 
     profResult.innerHTML = `
-      <div class="monster-card">
-        <div class="monster-header">
+      <div class="entity-card">
+        <div class="entity-header">
           <h2>${data.name}</h2>
           <p><strong>Type :</strong> ${data.type}</p>
         </div>
 
-        <div class="monster-image-container" style="text-align: center; margin: 20px 0;">
+        <div class="entity-image-container" style="text-align: center; margin: 20px 0;">
           <img src="${imagePath}" 
                alt="${data.name}" 
                style="max-width: 250px; border-radius: 12px; display: none; box-shadow: 0 4px 8px rgba(0,0,0,0.2);" 
@@ -100,7 +100,7 @@ async function searchProficiency(profIndex) {
                onerror="this.style.display='none'">
         </div>
 
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong>Classes pouvant l'obtenir :</strong></p>
           <ul>
             ${
