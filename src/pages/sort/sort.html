@@ -2,10 +2,9 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>D&D 5e - Répertoire de sorts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../../style.css" />
-    <link rel="stylesheet" href="sort.css" />
+    <title>Recherche de sorts</title>
 
     <!-- WebComponents & Modules -->
     <script src="../../components/dnd-markdown.js"></script>
@@ -14,33 +13,23 @@
     <script src="../../components/dnd-stat-grid.js"></script>
   </head>
   <body>
-    <main class="container sort-container">
-      <h1>Répertoire de sorts D&D 5e</h1>
+    <div class="container">
+      <h1>Recherche de sorts</h1>
 
-      <!-- Recherche temps réel -->
-      <section class="search-section">
-        <dnd-search-bar
-          id="searchBar"
-          placeholder="Rechercher un sort..."
-          show-button="false"
-          realtime="true"
-          debounce="200"
-        ></dnd-search-bar>
-      </section>
+      <dnd-search-bar
+        id="searchBar"
+        placeholder="Entrez un nom de sort"
+        button-text="Rechercher"
+      ></dnd-search-bar>
 
-      <div class="content">
-        <!-- Liste des sorts -->
-        <section class="directory">
-          <ul id="spellList"></ul>
-        </section>
+      <dnd-dropdown
+        id="spellDropdown"
+        placeholder="-- Choisissez un sort --"
+      ></dnd-dropdown>
 
-        <!-- Détails du sort -->
-        <section id="spellResult" class="result-section">
-          <p>Sélectionne un sort pour voir les détails.</p>
-        </section>
-      </div>
-    </main>
+      <div id="spellResult" class="entity-result"></div>
+    </div>
 
-    <script src="spells.js"></script>
+    <script src="sort.js"></script>
   </body>
 </html>

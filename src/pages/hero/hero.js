@@ -297,8 +297,8 @@ async function searchClass(indexOrName) {
     const placeholder = `https://placehold.co/600x400/8b0000/FFF?text=${heroData.name}`;
 
     heroResult.innerHTML = `
-      <div class="monster-card">
-        <div class="monster-header">
+      <div class="entity-card">
+        <div class="entity-header">
           <h2>${heroData.name}</h2>
           <p><em>Class (Héros) - Hit Die: d${heroData.hit_die}</em></p>
         </div>
@@ -306,20 +306,20 @@ async function searchClass(indexOrName) {
         <img
           src="${imagePath}"
           alt="${heroData.name}"
-          class="monster-image"
+          class="entity-image"
           onerror="this.onerror=null; this.src='${placeholder}';"
         />
 
         <!-- Stats de la classe (WebComponent) -->
         <dnd-stat-grid id="heroStats"></dnd-stat-grid>
 
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong>Proficiencies:</strong> ${formatProficiencies(
             heroData.proficiencies
           )}</p>
         </div>
 
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Starting Equipment</h3>
           ${formatList(heroData.starting_equipment)}
 

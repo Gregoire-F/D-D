@@ -77,22 +77,22 @@ async function searchBackground(backgroundName) {
 
     // Construction de la fiche de background
     backgroundResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${backgroundData.name}</h2>
           <p><em>Background</em></p>
         </div>
 
         <!-- Informations principales -->
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong class="tooltip" data-tooltip="Compétences : Compétences obtenues grâce à ce background.">Compétences:</strong> ${backgroundData.proficiencies?.map(p => p.name).join(", ") || "Aucune"}</p>
           <p><strong class="tooltip" data-tooltip="Langues : Langues obtenues grâce à ce background.">Langues:</strong> ${backgroundData.language_proficiencies?.map(l => l.name).join(", ") || "Aucune"}</p>
           <p><strong class="tooltip" data-tooltip="Équipement de départ : Équipement obtenu au début.">Équipement de départ:</strong> ${backgroundData.starting_equipment?.map(e => e.equipment?.name || e.name).join(", ") || "Aucun"}</p>
         </div>
 
         <!-- Traits -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Traits</h3>
           ${backgroundData.personality_traits ? 
             `<dnd-markdown>${backgroundData.personality_traits.from ? backgroundData.personality_traits.from.name : ""}</dnd-markdown>` : 
@@ -101,7 +101,7 @@ async function searchBackground(backgroundName) {
         </div>
 
         <!-- Idéaux -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Idéaux</h3>
           ${backgroundData.ideals ? 
             `<dnd-markdown>${backgroundData.ideals.from ? backgroundData.ideals.from.name : ""}</dnd-markdown>` : 
@@ -110,7 +110,7 @@ async function searchBackground(backgroundName) {
         </div>
 
         <!-- Liens -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Liens</h3>
           ${backgroundData.bonds ? 
             `<dnd-markdown>${backgroundData.bonds.from ? backgroundData.bonds.from.name : ""}</dnd-markdown>` : 
@@ -119,7 +119,7 @@ async function searchBackground(backgroundName) {
         </div>
 
         <!-- Défauts -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Défauts</h3>
           ${backgroundData.flaws ? 
             `<dnd-markdown>${backgroundData.flaws.from ? backgroundData.flaws.from.name : ""}</dnd-markdown>` : 

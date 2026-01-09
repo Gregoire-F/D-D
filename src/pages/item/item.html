@@ -14,21 +14,20 @@
   </head>
   <body>
     <div class="container">
-      <h1>Grimoire d'Items</h1>
+      <h1>Recherche d'items</h1>
 
       <dnd-search-bar
         id="searchBar"
-        placeholder="Rechercher (ex: Dagger, Shield)..."
+        placeholder="Entrez un nom d'item"
         button-text="Rechercher"
       ></dnd-search-bar>
 
       <dnd-dropdown
         id="itemDropdown"
-        placeholder="-- Choisir un item --"
-        hidden
+        placeholder="-- Choisissez un item --"
       ></dnd-dropdown>
 
-      <div class="monster-result" id="resultArea"></div>
+      <div id="itemResult" class="entity-result"></div>
     </div>
 
     <script src="item.js"></script>

@@ -1,99 +1,133 @@
-const BASE_URL = "https://www.dnd5eapi.co";
-
 // ========================================
 // DÉCLARATION DES VARIABLES DOM
 // ========================================
 const searchBar = document.getElementById("searchBar");
 const itemDropdown = document.getElementById("itemDropdown");
-const resultArea = document.getElementById("resultArea");
+const itemResult = document.getElementById("itemResult");
 
-// Cache des items
-let globalItems = [];
+// Cache des items pour éviter les requêtes multiples
+let allItems = [];
 
 // ========================================
-// CHARGEMENT INITIAL
+// CHARGEMENT INITIAL DE LA PAGE
 // ========================================
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const [eqRes, magicRes] = await Promise.all([
-      fetch(`${BASE_URL}/api/equipment`),
-      fetch(`${BASE_URL}/api/magic-items`),
+      fetch("https://www.dnd5eapi.co/api/2014/equipment"),
+      fetch("https://www.dnd5eapi.co/api/2014/magic-items"),
     ]);
     const eqData = await eqRes.json();
     const magicData = await magicRes.json();
 
-    // Fusion des listes
-    globalItems = [...eqData.results, ...magicData.results];
-    console.log("Inventaire chargé : " + globalItems.length);
+    // Fusion et tri alphabétique des items
+    allItems = [...eqData.results, ...magicData.results].sort((a, b) => 
+      a.name.localeCompare(b.name)
+    );
+
+    // Peupler le dropdown avec les WebComponents
+    const options = allItems.map((item) => ({
+      value: item.name.toLowerCase(),
+      label: item.name,
+    }));
+    itemDropdown.setOptions(options);
   } catch (error) {
-    console.error("Erreur API", error);
-    resultArea.innerHTML = "<p>Erreur de connexion à l'API.</p>";
+    console.error("Erreur lors du chargement du menu :", error);
   }
 });
 
 // ========================================
 // GESTION DES ÉVÉNEMENTS (WebComponents)
 // ========================================
+// Événement de recherche depuis la barre de recherche
 searchBar.addEventListener("dnd-search", (e) => {
-  const query = e.detail.query;
+  const query = e.detail.query.toLowerCase();
   if (query) {
-    performSearch(query);
-  }
-});
-
-itemDropdown.addEventListener("dnd-select", (e) => {
-  const { value } = e.detail;
-  if (value) {
-    fetchAndRenderItem(value);
-  }
-});
-
-// ========================================
-// LOGIQUE DE RECHERCHE
-// ========================================
-function performSearch(query) {
-  const lowerQuery = query.toLowerCase().trim();
-  if (!lowerQuery) return;
-
-  // Filtrer
-  const matches = globalItems.filter((item) =>
-    item.name.toLowerCase().includes(lowerQuery)
-  );
-
-  // Reset UI
-  resultArea.innerHTML = "";
-  itemDropdown.clear();
-
-  if (matches.length === 0) {
-    resultArea.innerHTML = "<p>Aucun item trouvé.</p>";
-    itemDropdown.hide();
-  } else if (matches.length === 1) {
-    // Un seul résultat : on affiche direct
-    itemDropdown.hide();
-    fetchAndRenderItem(matches[0].url);
+    searchItem(query);
   } else {
-    // Plusieurs résultats : on remplit le dropdown
-    const options = matches.map((item) => ({
-      value: item.url,
-      label: item.name,
-    }));
-    itemDropdown.setOptions(options);
-    itemDropdown.show();
+    itemResult.innerHTML = "Veuillez entrer un nom d'item.";
+  }
+});
+
+// Événement de sélection depuis le dropdown
+itemDropdown.addEventListener("dnd-select", (e) => {
+  const { value, label } = e.detail;
+  if (value) {
+    searchBar.value = label;
+    searchItem(value);
+  }
+});
+
+// ========================================
+// FONCTIONS DE RECHERCHE
+// ========================================
+async function searchItem(query) {
+  try {
+    // Chercher l'item dans le cache
+    const foundItem = allItems.find(item => 
+      item.name.toLowerCase().includes(query)
+    );
+
+    if (!foundItem) {
+      itemResult.innerHTML = `<p>Aucun item trouvé pour "${query}"</p>`;
+      return;
+    }
+
+    // Récupérer les détails complets de l'item
+    const itemUrl = foundItem.url.startsWith('http') 
+      ? foundItem.url 
+      : `https://www.dnd5eapi.co${foundItem.url}`;
+    
+    const response = await fetch(itemUrl);
+    const itemDetails = await response.json();
+
+    // Afficher les détails de l'item
+    renderCard(itemDetails);
+  } catch (error) {
+    console.error("Erreur lors de la recherche:", error);
+    itemResult.innerHTML = `<p>Erreur lors du chargement de l'item</p>`;
   }
 }
 
 // ========================================
-// FETCH ET AFFICHAGE
+// FONCTIONS DE FORMATTAGE DES DONNÉES
 // ========================================
-async function fetchAndRenderItem(urlSuffix) {
-  resultArea.innerHTML = "<p>Chargement des détails...</p>";
-  try {
-    const res = await fetch(BASE_URL + urlSuffix);
-    const data = await res.json();
-    renderCard(data);
-  } catch (e) {
-    resultArea.innerHTML = "<p>Erreur lors du chargement de l'item.</p>";
+function formatCost(cost) {
+  if (!cost) return "N/A";
+  return `${cost.quantity} ${cost.unit}`;
+}
+
+function formatWeight(weight) {
+  if (!weight) return "N/A";
+  return `${weight} lb`;
+}
+
+function getItemThirdStat(item) {
+  if (item.armor_class) {
+    return {
+      label: "AC",
+      value: item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : ""),
+      tooltip: "Classe d'armure - Protection fournie"
+    };
+  } else if (item.damage) {
+    return {
+      label: "Dégâts", 
+      value: `${item.damage.damage_dice} ${item.damage.damage_type.name}`,
+      tooltip: "Dégâts infligés par l'arme"
+    };
+  } else if (item.rarity) {
+    return {
+      label: "Rareté",
+      value: item.rarity.name,
+      tooltip: "Niveau de rareté de l'objet magique"
+    };
   }
+  
+  return {
+    label: "Info",
+    value: "-",
+    tooltip: "Information supplémentaire"
+  };
 }
 
 function renderCard(item) {
@@ -101,38 +135,33 @@ function renderCard(item) {
   const cost = item.cost ? `${item.cost.quantity} ${item.cost.unit}` : "-";
   const weight = item.weight ? `${item.weight} lb` : "-";
 
-  // Logique pour la 3ème stat
-  let stat3Label = "Info";
-  let stat3Value = "-";
-  let stat3Tooltip = "";
+  // --- LOGIQUE IMAGE (AJOUTÉ) ---
+  // Construction du nom de fichier : "Dagger" -> "dagger.webp"
+  const imageName = item.name.trim().toLowerCase().replace(/\s+/g, '_') + '.webp';
+  // Chemin vers le dossier images depuis pages/item/
+  const imagePath = `../../assets/images/equipment/${imageName}`;
 
-  if (item.armor_class) {
-    stat3Label = "AC";
-    stat3Value =
-      item.armor_class.base + (item.armor_class.dex_bonus ? " + Dex" : "");
-    stat3Tooltip = "Classe d'armure - Protection fournie";
-  } else if (item.damage) {
-    stat3Label = "Dégâts";
-    stat3Value = `${item.damage.damage_dice} ${item.damage.damage_type.name}`;
-    stat3Tooltip = "Dégâts infligés par l'arme";
-  } else if (item.rarity) {
-    stat3Label = "Rareté";
-    stat3Value = item.rarity.name;
-    stat3Tooltip = "Niveau de rareté de l'objet magique";
-  }
+  // Logique pour la 3ème stat
+  const thirdStat = getItemThirdStat(item);
 
   let html = `
-    <div class="monster-card">
-      <div class="monster-header">
+    <div class="entity-card">
+      <div class="entity-header">
         <h2>${item.name}</h2>
         <p>${type}</p>
+      </div>
+
+      <div style="text-align:center; margin-bottom: 20px;">
+          <img src="${imagePath}" 
+               alt="${item.name}"
+               style="max-width:250px; max-height:250px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" 
+               onerror="this.style.display='none';">
       </div>
 
       <div class="monster-stats-top">
         <p><strong>Catégorie :</strong> ${type}</p>
       </div>
 
-      <!-- Stats de l'item (WebComponent) -->
       <dnd-stat-grid id="itemStats"></dnd-stat-grid>
 
       <div class="monster-actions">
@@ -160,10 +189,10 @@ function renderCard(item) {
 
   html += `</ul></div></div>`;
 
-  resultArea.innerHTML = html;
+  itemResult.innerHTML = html;
 
   // Peupler le composant stat-grid avec les stats de l'item
-  const statGrid = resultArea.querySelector("#itemStats");
+  const statGrid = itemResult.querySelector("#itemStats");
   statGrid.stats = [
     {
       label: "Coût",
@@ -176,9 +205,9 @@ function renderCard(item) {
       tooltip: "Poids de l'objet en livres",
     },
     {
-      label: stat3Label,
-      value: stat3Value,
-      tooltip: stat3Tooltip || "Information supplémentaire",
+      label: thirdStat.label,
+      value: thirdStat.value,
+      tooltip: thirdStat.tooltip,
     },
   ];
 }
