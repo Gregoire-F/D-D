@@ -544,14 +544,12 @@ render() {
           :host {
             bottom: 1rem;
             left: 1rem;
-            right: 1rem;
           }
 
           .mixer {
             width: calc(100vw - 2rem);
             max-width: none;
             left: -1rem;
-            right: -1rem;
             border-radius: 12px 12px 0 0;
             padding: 1rem;
           }

@@ -188,6 +188,41 @@ class DndDiceRoller extends HTMLElement {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Adaptation mobile */
+        @media (max-width: 480px) {
+          :host {
+            bottom: 1rem;
+            right: 1rem;
+          }
+
+          .dice-button {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+          }
+
+          .menu {
+            width: calc(100vw - 2rem);
+            max-width: none;
+            right: -1rem;
+            left: auto;
+            border-radius: 12px 12px 0 0;
+            padding: 1rem;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .menu {
+            width: calc(100vw - 1rem);
+            right: -0.5rem;
+            padding: 0.8rem;
+          }
+
+          :host {
+            right: 0.5rem;
+          }
+        }
       </style>
 
       <!-- Bouton icône -->
