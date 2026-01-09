@@ -1,85 +1,132 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dungeons & Dragons - Exploration</title>
+    <link rel="stylesheet" href="accueil.css" />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="components/dnd-sound-player.js" defer></script>
+    <script src="components/dnd-dice-roller.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dungeons & Dragons - Exploration</title>
-  <link rel="stylesheet" href="accueil.css" />
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <script src="components/dnd-sound-player.js" defer></script>
-  <script src="components/dnd-dice-roller.js" defer></script>
-</head>
+  <body>
+    <dnd-navbar root="."></dnd-navbar>
+    <div class="container"></div>
+    <script src="components/dnd-navbar.js"></script>
+    <script type="module" src="components/dnd-favorite.js"></script>
+    <div class="container">
+      <section id="favorites-section">
+        <favorites-global></favorites-global>
+      </section>
+      <header>
+        <div class="info-container">
+          <a href="../readme.html" class="info-btn">
+            <i class="fas fa-info-circle"></i> Info
+          </a>
+        </div>
+        <h1>Dungeons & Dragons</h1>
+        <p class="subtitle">Explorez les mystères de l'univers D&D</p>
+      </header>
 
-<body>
-  <dnd-navbar root="."></dnd-navbar>
-  <div class="container"></div>
-  <script src="components/dnd-navbar.js"></script>
-  <script type="module" src="components/dnd-favorite.js"></script>
-  <div class="container">
-    <section id="favorites-section">
-      <favorites-global></favorites-global>
-    </section>
-    <header>
-      <h1>Dungeons & Dragons</h1>
-      <p class="subtitle">Explorez les mystères de l'univers D&D</p>
-    </header>
+      <main id="main-content">
+        <div class="categories">
+          <category-card
+            icon="fas fa-user"
+            title="Héros"
+            description="Découvrez les héros et leurs statistiques."
+            url="pages/hero/hero.html"
+          >
+          </category-card>
 
+          <category-card
+            icon="fas fa-wand-magic-sparkles"
+            title="Sorts"
+            description="Découvrez les sorts et leurs statistiques."
+            url="pages/sort/sort.html"
+          >
+          </category-card>
 
+          <category-card
+            icon="fas fa-shield-halved"
+            title="Items"
+            description="Découvrez les items et leurs statistiques."
+            url="pages/item/item.html"
+          >
+          </category-card>
 
-    <main id="main-content">
-      <div class="categories">
-        <category-card icon="fas fa-user" title="Héros" description="Découvrez les héros et leurs statistiques."
-          url="pages/hero/hero.html">
-        </category-card>
+          <category-card
+            icon="fas fa-dragon"
+            title="Monstres"
+            description="Découvrez les monstres et leurs statistiques."
+            url="pages/monstre/monstre.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-wand-magic-sparkles" title="Sorts"
-          description="Découvrez les sorts et leurs statistiques." url="pages/sort/sort.html">
-        </category-card>
+          <category-card
+            icon="fas fa-layer-group"
+            title="Sous-classes"
+            description="Explorez les spécialisations des classes."
+            url="pages/subclass/subclass.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-shield-halved" title="Items"
-          description="Découvrez les items et leurs statistiques." url="pages/item/item.html">
-        </category-card>
+          <category-card
+            icon="fas fa-scroll"
+            title="Backgrounds"
+            description="Découvrez les histoires et origines des personnages."
+            url="pages/background/background.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-dragon" title="Monstres" description="Découvrez les monstres et leurs statistiques."
-          url="pages/monstre/monstre.html">
-        </category-card>
+          <category-card
+            icon="fas fa-comments"
+            title="Langues"
+            description="Explorez les langues du monde D&D."
+            url="pages/languages/languages.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-layer-group" title="Sous-classes"
-          description="Explorez les spécialisations des classes." url="pages/subclass/subclass.html">
-        </category-card>
+          <category-card
+            icon="fas fa-bolt"
+            title="Aptitudes de classe"
+            description="Découvrez les pouvoirs spéciaux des classes."
+            url="pages/class-features/class-features.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-scroll" title="Backgrounds"
-          description="Découvrez les histoires et origines des personnages." url="pages/background/background.html">
-        </category-card>
+          <category-card
+            icon="fas fa-dna"
+            title="Traits raciaux"
+            description="Explorez les capacités des différentes races."
+            url="pages/racial-traits/racial-traits.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-comments" title="Langues" description="Explorez les langues du monde D&D."
-          url="pages/languages/languages.html">
-        </category-card>
+          <category-card
+            icon="fas fa-toolbox"
+            title="Maîtrises"
+            description="Consultez les maîtrises d'armes, d'outils et d'armures."
+            url="pages/proficiencies/proficiencies.html"
+          >
+          </category-card>
 
-        <category-card icon="fas fa-bolt" title="Aptitudes de classe"
-          description="Découvrez les pouvoirs spéciaux des classes." url="pages/class-features/class-features.html">
-        </category-card>
-
-        <category-card icon="fas fa-dna" title="Traits raciaux"
-          description="Explorez les capacités des différentes races." url="pages/racial-traits/racial-traits.html">
-        </category-card>
-
-        <category-card icon="fas fa-toolbox" title="Maîtrises"
-          description="Consultez les maîtrises d'armes, d'outils et d'armures."
-          url="pages/proficiencies/proficiencies.html">
-        </category-card>
-
-        <category-card icon="fas fa-book" title="Règles" description="Consultez les règles du jeu."
-          url="pages/rules/rules.html">
-        </category-card>
-      </div>
-    </main>
-  </div>
-  <script src="components/CategoryCard.js"></script>
-  <dnd-sound-player></dnd-sound-player>
-  <dnd-dice-roller></dnd-dice-roller>
-</body>
-
+          <category-card
+            icon="fas fa-book"
+            title="Règles"
+            description="Consultez les règles du jeu."
+            url="pages/rules/rules.html"
+          >
+          </category-card>
+        </div>
+      </main>
+    </div>
+    <script src="components/CategoryCard.js"></script>
+    <dnd-sound-player></dnd-sound-player>
+    <dnd-dice-roller></dnd-dice-roller>
+  </body>
 </html>
