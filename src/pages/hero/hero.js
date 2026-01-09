@@ -302,7 +302,7 @@ async function searchClass(indexOrName) {
     const spellCount = spells.length;
 
     // Gestion de l'image
-    const imagePath = `../../assets/images/classes/${heroData.index}.jpg`;
+    const imagePath = `../../assets/images/classes/${heroData.index}.webp`;
     const placeholder = `https://placehold.co/600x400/8b0000/FFF?text=${heroData.name}`;
 
     heroResult.innerHTML = `
