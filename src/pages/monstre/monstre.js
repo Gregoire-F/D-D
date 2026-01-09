@@ -104,9 +104,9 @@ async function searchMonster(monsterName) {
 
     // Construction de la fiche de monstre
     monsterResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${monsterData.name}</h2>
           <p><em>${monsterData.size} ${monsterData.type}, ${
       monsterData.alignment
@@ -116,12 +116,12 @@ async function searchMonster(monsterName) {
         <!-- Image du monstre si disponible -->
         ${
           monsterData.image
-            ? `<img src="https://www.dnd5eapi.co${monsterData.image}" alt="${monsterData.name}" class="monster-image">`
+            ? `<img src="https://www.dnd5eapi.co${monsterData.image}" alt="${monsterData.name}" class="entity-image">`
             : ""
         }
 
         <!-- Statistiques principales de combat -->
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Armor Class (AC) : Difficulté pour toucher la créature.">Armor Class:</strong> ${formatAC(
             monsterData.armor_class
           )}</p>
@@ -137,7 +137,7 @@ async function searchMonster(monsterName) {
         <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
 
         <!-- Informations de jeu -->
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong class="tooltip" data-tooltip="Challenge Rating (CR) : Niveau de puissance du monstre.">Challenge:</strong> ${
             monsterData.challenge_rating
           } (${monsterData.xp} XP)</p>
@@ -145,7 +145,7 @@ async function searchMonster(monsterName) {
         </div>
 
         <!-- Actions et capacités spéciales -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Actions</h3>
           ${formatList(monsterData.actions)}
 

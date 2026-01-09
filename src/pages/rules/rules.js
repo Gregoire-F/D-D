@@ -106,19 +106,19 @@ async function searchRule(indexOrName) {
     const ruleData = await response.json();
 
     rulesResult.innerHTML = ` 
-      <div class="monster-card">
-        <div class="monster-header">
+      <div class="entity-card">
+        <div class="entity-header">
           <h2>${ruleData.name}</h2>
         </div>
 
-        <div class="monster-details">
+        <div class="entity-details">
           ${DndMarkdown.parse(ruleData.desc)}
         </div>
 
         ${formatSubsections(ruleData.subsections)}
 
         <!-- Contenu de la sous-section sélectionnée -->
-        <div id="subsectionContent" class="monster-actions"></div>
+        <div id="subsectionContent" class="entity-content"></div>
       </div>`
     ;
 

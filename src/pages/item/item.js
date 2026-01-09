@@ -131,15 +131,15 @@ async function searchItem(itemName) {
 
     // Construction de la fiche d'item
     itemResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${itemData.name}</h2>
           <p><em>${type}</em></p>
         </div>
 
         <!-- Statistiques principales -->
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Catégorie de l'objet.">Catégorie:</strong> ${type}</p>
           <p><strong class="tooltip" data-tooltip="Poids de l'objet.">Poids:</strong> ${formatWeight(itemData.weight)}</p>
           <p><strong class="tooltip" data-tooltip="${thirdStat.tooltip}">${thirdStat.label}:</strong> ${thirdStat.value}</p>
@@ -149,13 +149,13 @@ async function searchItem(itemName) {
         <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
 
         <!-- Informations de jeu -->
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong class="tooltip" data-tooltip="Prix de l'objet.">Coût:</strong> ${formatCost(itemData.cost)}</p>
           <p><strong>Propriétés:</strong> ${formatProperties(itemData.properties)}</p>
         </div>
 
         <!-- Description et capacités spéciales -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Description</h3>
           <ul>
             ${

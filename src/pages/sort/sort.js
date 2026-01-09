@@ -102,15 +102,15 @@ async function searchSpell(spellName) {
 
     // Construction de la fiche de sort
     spellResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${spellData.name}</h2>
           <p><em>${spellData.level === 0 ? "Sortilège" : "Niveau " + spellData.level} - ${spellData.school.name}</em></p>
         </div>
 
         <!-- Statistiques principales de combat -->
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Temps nécessaire pour lancer le sort.">Incantation:</strong> ${spellData.casting_time}</p>
           <p><strong class="tooltip" data-tooltip="Distance maximale d'effet du sort.">Portée:</strong> ${spellData.range}</p>
           <p><strong class="tooltip" data-tooltip="Durée de l'effet du sort.">Durée:</strong> ${spellData.duration}</p>
@@ -120,7 +120,7 @@ async function searchSpell(spellName) {
         <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
 
         <!-- Informations de jeu -->
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong class="tooltip" data-tooltip="Composants nécessaires pour le sort.">Composants:</strong> ${formatComponents(spellData.components)}</p>
           <p><strong>Type de Dégâts:</strong> ${spellData.damage?.damage_type?.name || "N/A"}</p>
           <p><strong>Jet de Sauvegarde:</strong> ${spellData.dc?.dc_type?.name || "N/A"}</p>
@@ -129,7 +129,7 @@ async function searchSpell(spellName) {
         </div>
 
         <!-- Actions et capacités spéciales -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Description</h3>
           <p>${DndMarkdown.parseArray(spellData.desc)}</p>
 

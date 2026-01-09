@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     } catch (error) {
         console.error(error);
-        container.innerHTML = `<div class="monster-card"><h2>Erreur</h2><p>Impossible de charger les données.</p></div>`;
+        container.innerHTML = `<div class="entity-card"><h2>Erreur</h2><p>Impossible de charger les données.</p></div>`;
     }
 
     // --- TEMPLATES ---
@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     function renderMonster(data) {
         const image = data.image ? `https://www.dnd5eapi.co${data.image}` : "";
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${data.size} ${data.type}, ${data.alignment}</em></p>
             </div>
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ${renderStats(data)}
             </div>
 
-            <div class="monster-actions">
+            <div class="entity-content">
                 <h3>Actions</h3>
                 ${formatList(data.actions)}
                 ${data.legendary_actions ? `<h3>Légendaire</h3>${formatList(data.legendary_actions)}` : ""}
@@ -64,8 +64,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderSpell(data) {
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${data.level === 0 ? "Tour de magie" : "Niveau " + data.level} • ${data.school.name}</em></p>
             </div>
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <span>📏 ${data.range}</span>
                 <span>⏳ ${data.duration}</span>
             </div>
-            <div class="monster-content">
+            <div class="entity-content">
                 <p>${data.desc.join("<br><br>")}</p>
                 ${data.higher_level ? `<div style="margin-top:20px; padding:10px; background:#fff; border-left:3px solid #8b0000;"><strong>À plus haut niveau :</strong><br>${data.higher_level.join("<br>")}</div>` : ""}
             </div>
@@ -83,12 +83,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderClass(data) {
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>Classe</em></p>
             </div>
-            <div class="monster-content">
+            <div class="entity-content">
                 <p><strong>Dé de vie :</strong> d${data.hit_die}</p>
                 <h3>Maîtrises</h3>
                 <p><strong>Sauvegardes :</strong> ${data.saving_throws.map(s => s.name).join(", ")}</p>
@@ -99,15 +99,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function renderRace(data) {
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>Race - Vitesse : ${data.speed} ft</em></p>
             </div>
             <div style="margin-bottom:20px;">
                 <strong>Taille :</strong> ${data.size} | <strong>Alignement :</strong> ${data.alignment || "Variable"}
             </div>
-            <div class="monster-content">
+            <div class="entity-content">
                 <h3>Traits</h3>
                 ${data.traits.length > 0 ? `<ul>${data.traits.map(t => `<li><strong>${t.name}</strong></li>`).join("")}</ul>` : "Aucun"}
                 <h3>Description</h3>
@@ -120,12 +120,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         let content = data.desc || "";
         content = content.replace(/^# (.*$)/gim, '<h3>$1</h3>').replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>');
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${type}</em></p>
             </div>
-            <div class="monster-content">${content ? `<p>${content}</p>` : ""}</div>
+            <div class="entity-content">${content ? `<p>${content}</p>` : ""}</div>
             ${data.subsections ? `<h3>Sous-sections</h3><ul>${data.subsections.map(s => `<li>${s.name}</li>`).join("")}</ul>` : ""}
         </div>`;
     }
@@ -134,12 +134,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         let desc = "";
         if (data.desc) desc = Array.isArray(data.desc) ? data.desc.join("<br><br>") : data.desc;
         container.innerHTML = `
-        <div class="monster-card">
-            <div class="monster-header">
+        <div class="entity-card">
+            <div class="entity-header">
                 <h1>${data.name}</h1>
                 <p><em>${type}</em></p>
             </div>
-            <div class="monster-content">
+            <div class="entity-content">
                 ${data.cost ? `<p><strong>Coût:</strong> ${data.cost.quantity} ${data.cost.unit}</p>` : ""}
                 <hr>
                 <p>${desc || "Pas de description."}</p>

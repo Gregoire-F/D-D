@@ -106,14 +106,14 @@ async function searchFeatures(featureName) {
 
     // Construction de la fiche d'aptitude
     classFeaturesResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${featureData.name}</h2>
         </div>
 
         <!-- Statistiques principales de l'aptitude -->
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Niveau  : Niveau requis pour utiliser">Niveau:</strong> ${
             featureData.level
           }</p>

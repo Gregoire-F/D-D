@@ -90,15 +90,15 @@ async function searchRacialTrait(traitName) {
 
     // Construction de la fiche de trait racial
     racialTraitsResult.innerHTML = `
-      <div class="monster-card">
+      <div class="entity-card">
         <!-- En-tête avec nom et caractéristiques de base -->
-        <div class="monster-header">
+        <div class="entity-header">
           <h2>${traitData.name}</h2>
           <p><em>Trait racial</em></p>
         </div>
 
         <!-- Statistiques principales -->
-        <div class="monster-stats-top">
+        <div class="entity-stats-top">
           <p><strong class="tooltip" data-tooltip="Type de trait racial.">Type:</strong> Trait racial</p>
           <p><strong class="tooltip" data-tooltip="Races concernées.">Races:</strong> ${formatRaces(traitData.races)}</p>
           <p><strong class="tooltip" data-tooltip="Sous-races concernées.">Sous-races:</strong> ${formatSubraces(traitData.subraces)}</p>
@@ -108,13 +108,13 @@ async function searchRacialTrait(traitName) {
         <dnd-stat-grid id="monsterStats"></dnd-stat-grid>
 
         <!-- Informations de jeu -->
-        <div class="monster-details">
+        <div class="entity-details">
           <p><strong>Nombre de races:</strong> ${traitData.races?.length || 0}</p>
           <p><strong>Nombre de sous-races:</strong> ${traitData.subraces?.length || 0}</p>
         </div>
 
         <!-- Description et capacités spéciales -->
-        <div class="monster-actions">
+        <div class="entity-content">
           <h3>Description</h3>
           <p>${traitData.desc ? DndMarkdown.parseArray(traitData.desc) : "Aucune description disponible."}</p>
         </div>
