@@ -116,3 +116,4 @@ Et on enregistre le composant avec `https://github.com/SnayZz371/D-D/raw/refs/he
 * illustrations supplémentaires  
   * site : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip\_pictures/](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)  
   * projet : [https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip\_pictures](https://github.com/SnayZz371/D-D/raw/refs/heads/main/src/pages/background/D_finer.zip)
+ 
